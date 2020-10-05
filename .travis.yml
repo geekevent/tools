@@ -1,0 +1,13 @@
+
+language: php
+php:
+  - '7.4.6'
+
+install:
+  - composer install --dev
+
+script:
+  - ./vendor/bin/phpunit --coverage-clover ./tests/logs/clover.xml
+
+after_script:
+  - php vendor/bin/php-coveralls -v
