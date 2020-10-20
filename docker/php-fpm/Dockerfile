@@ -20,6 +20,10 @@ RUN docker-php-ext-install \
     pdo_mysql \
     zip
 
+
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
 ENV         COMPOSER_HOME=/var/composer
 COPY        ./composer-install /tmp/composer-install
 RUN         chmod +x /tmp/composer-install && \
