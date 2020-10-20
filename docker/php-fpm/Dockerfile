@@ -16,7 +16,13 @@ RUN apt-get update \
 
 RUN docker-php-ext-install \
     sodium \
+    pdo \
+    pdo_mysql \
     zip
+
+
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
 
 ENV         COMPOSER_HOME=/var/composer
 COPY        ./composer-install /tmp/composer-install

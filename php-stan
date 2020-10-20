@@ -1,0 +1,3 @@
+#!/bin/bash
+
+vendor/bin/phpstan analyse --level=7 --memory-limit=-1 public src tests

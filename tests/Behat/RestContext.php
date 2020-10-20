@@ -19,7 +19,6 @@ class RestContext implements Context
         $this->container = $container;
     }
 
-
     /**
      * @When I send a :method request to :path with body:
      */
