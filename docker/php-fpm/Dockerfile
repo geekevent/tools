@@ -16,6 +16,8 @@ RUN apt-get update \
 
 RUN docker-php-ext-install \
     sodium \
+    pdo \
+    pdo_mysql \
     zip
 
 ENV         COMPOSER_HOME=/var/composer
