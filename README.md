@@ -31,6 +31,8 @@ mettre à jour les paquets
 ```shell script
 composer install
 ```
+__commande a lancer dans le container avant de commit
+tout les erreurs doivent être corrigée avant de commit__
 
 mettre à jour la base de donnée:
 ```shell script
@@ -55,4 +57,9 @@ appliquer le linter PHP:
 Appliquer php-stan
 ```shell script
 ./php-stan
+```
+
+vérifier la validité du schéma
+```shell script
+bin/console do:sc:va
 ```
