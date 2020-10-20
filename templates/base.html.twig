@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+        <!-- Google Fonts Roboto -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+        <!-- Material Design Bootstrap -->
+        <link rel="stylesheet" href="/assets/css/mdb.min.css">
+        <link rel="stylesheet" href="/assets/css/style.css">
+        {% block stylesheets %}
+        {% endblock %}
+    </head>
+    <body class="container-fluid">
+        <div class="row">
+            <div class="col-12 border-bottom border-dark z-depth-2" id="nav-bar">
+                <div class="row">
+                    <div class="col-2 text-center">
+                        <a href="#"
+                           id="side-nav-control"
+                           data-activates="slide-out"
+                           class="btn button-collapse">
+                            <i class="fas fa-bars"></i>
+                        </a>
+                    </div>
+                    <div class="col-10">
+                        <h1 class="align-top mt-1 mb-0">Geek-Event</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 full-height">
+                <div class="row inner-height">
+                    <div class="col-md-2 animated displayed peach-gradient border border-top-0 border-left-0 border-bottom-0 border-dark z-depth-2" id="side-nav">
+                        <div id="slide-out" class="side-nav side">
+                        <!-- Links -->
+                            <div class="row justify-content-center">
+                                <div class="col-6 account-section align-bottom">
+                                    <img class="rounded-circle z-depth-2 img-fluid" alt="100x100" src="https://mdbootstrap.com/img/Photos/Avatars/img%20(31).jpg"
+                                         data-holder-rendered="true">
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <span>
+                                        my Beautiful account
+                                    </span>
+                                </div>
+                            </div>
+                            <hr class="my-1">
+                            <ul class="custom-scrollbar">
+                                <li class="">
+                                    <a class="" href="#">Home</a>
+                                </li>
+                                <li class="">
+                                    <a class="" href="#">Features</a>
+                                </li>
+                                <li class="">
+                                    <a class="" href="#">Pricing</a>
+                                </li>
+                            </ul>
+                            <!-- Links -->
+                        </div>
+                    </div>
+                    <div class="col-md-10 p-5 rgba-grey-slight" id="main-content">
+                        {% block body %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery -->
+        <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="/assets/js/popper.min.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+        <!-- MDB core JavaScript -->
+        <script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+        <script type="text/javascript" src="/assets/js/addons/datatables.min.js"></script>
+        <script type="text/javascript" src="/assets/js/template.js"></script>
+        {% block javascripts %}
+        {% endblock %}
+    </body>
+</html>
