@@ -1,0 +1,22 @@
+name : doctrine
+
+on: [pull_request]
+
+jobs:
+  phpunit:
+    name: validation schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        uses: php-actions/composer@v2
+        with:
+          command: install
+          dev: yes
+      - name: php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: xdebug
+      - name: doctrine validate schema
+        run: ./bin/console do:sc:va --skip-sync --env=test

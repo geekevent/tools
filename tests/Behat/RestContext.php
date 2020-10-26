@@ -86,6 +86,7 @@ class RestContext implements Context
      */
     public function iFoundAWithAsName(string $arg1, string $arg2): void
     {
+        /** @var class-string<mixed> $className */
         $className = ClassFactory::getClass($arg1);
         /** @var EntityManager $entityManager */
         $entityManager = $this->container->get('doctrine.orm.entity_manager');
@@ -100,6 +101,7 @@ class RestContext implements Context
      */
     public function iDidntFoundA(string $arg1, string $arg2): void
     {
+        /** @var class-string<mixed> $className */
         $className = ClassFactory::getClass($arg1);
         /** @var EntityManager $entityManager */
         $entityManager = $this->container->get('doctrine.orm.entity_manager');
