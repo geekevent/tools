@@ -27,6 +27,7 @@ class Role extends AbstractEntity
     public function __construct()
     {
         $this->modules = new ArrayCollection();
+        $this->name = '';
     }
 
     public function getName(): string
