@@ -3,6 +3,7 @@
 namespace App\Entity\Account;
 
 use App\Entity\AbstractEntity;
+use App\Entity\IdentifiedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,8 +12,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="module")
  */
-class Module extends AbstractEntity
+class Module extends AbstractEntity implements IdentifiedEntity
 {
+    public const MODULE = [
+        'ROLE' => 'Rôle',
+        'MODULE' => 'Module',
+    ];
+
     /**
      * @ORM\Column(type="string", length=50, nullable=false, unique=true)
      */
@@ -23,6 +29,11 @@ class Module extends AbstractEntity
      * @ORM\ManyToMany(targetEntity="App\Entity\Account\Role", inversedBy="modules")
      */
     private Collection $roles;
+
+    /**
+     * @ORM\Column(type="string", length=10, nullable=false, unique=true)
+     */
+    private string $identifier;
 
     public function __construct()
     {
@@ -65,5 +76,17 @@ class Module extends AbstractEntity
     public function getRoles(): Collection
     {
         return $this->roles;
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+    public function setIdentifier(string $identifier): self
+    {
+        $this->identifier = $identifier;
+
+        return $this;
     }
 }

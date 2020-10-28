@@ -1,3 +1,4 @@
+@entity::role
 Feature: Role
   Main scenario for role CRUD
 

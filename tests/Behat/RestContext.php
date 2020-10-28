@@ -2,6 +2,9 @@
 
 namespace App\Tests\Behat;
 
+use App\Entity\AbstractEntity;
+use App\Entity\IdentifiedEntity;
+use App\Service\ModuleCreator;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\PyStringNode;
@@ -21,6 +24,8 @@ class RestContext implements Context
     private ContainerInterface $container;
 
     private ?string $token;
+
+    private ?string $entity;
 
     public function __construct(KernelBrowser $browser, ContainerInterface $container)
     {
@@ -51,7 +56,7 @@ class RestContext implements Context
     public function iSendARequestToWithBody(string $method, string $path, PyStringNode $string): void
     {
         $parameters = (array) json_decode((string) $string, true);
-        $parameters['role']['_token'] = $this->token;
+        $parameters[$this->entity]['_token'] = $this->token;
         $this->browser->request(
             $method,
             $path,
@@ -105,8 +110,53 @@ class RestContext implements Context
         $className = ClassFactory::getClass($arg1);
         /** @var EntityManager $entityManager */
         $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        /** @var AbstractEntity|null $item */
         $item = $entityManager->getRepository($className)->findOneBy(['name' => $arg2]);
 
         Assert::assertNull($item);
+    }
+
+    /**
+     * @When modules are inserted
+     */
+    public function modulesAreInserted(): void
+    {
+        /** @var EntityManager $entityManager */
+        $entityManager = $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        $moduleCreator = new ModuleCreator($entityManager);
+        $moduleCreator->run();
+    }
+
+    /**
+     * @Then the :arg1 with id :arg3 as :arg2 as identifier
+     */
+    public function theWithIdAsAsIdentifier(string $arg1, string $arg2, string $arg3): void
+    {
+        /** @var class-string<mixed> $className */
+        $className = ClassFactory::getClass($arg1);
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        /** @var IdentifiedEntity $item */
+        $item = $entityManager->getRepository($className)->findOneBy(['id' => $arg3]);
+
+        Assert::assertEquals($arg2, $item->getIdentifier());
+    }
+
+    /** @BeforeScenario */
+    public function before(BeforeScenarioScope $event): void
+    {
+        $tags = $event->getFeature()->getTags();
+        foreach ($tags as $tag) {
+            if (!preg_match('/entity::/i', $tag)) {
+                continue;
+            }
+
+            $parts = explode('::', $tag);
+            if (!isset($parts[1])) {
+                continue;
+            }
+
+            $this->entity = $parts[1];
+        }
     }
 }

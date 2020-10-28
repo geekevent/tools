@@ -1,0 +1,72 @@
+{% extends "/base.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+
+    <div class="row">
+        {%- if (app.request.get('moduleId') is not null) -%}
+        <div class="col-12">
+            <form class="border border-light p-5 rgba-white-strong" action="{{ action }}" method="POST">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <p class="h4 mt-5">Ajouter un Module</p>
+                    </div>
+                    <div class="col-4">
+                        {{ form_row(form.name) }}
+                    </div>
+                    <div class="col-4">
+                        {{ form_row(form.identifier) }}
+                    </div>
+                    <div class="col-4">
+                        {{ form_row(form.save) }}
+                        {{ form_row(form._token) }}
+                    </div>
+                </div>
+            </form>
+        </div>
+        {%- endif -%}
+        <div class="col-12 mt-5">
+            <div class="border border-light p-5 rgba-white-strong">
+                Liste des rôles
+                <table id="role-table" class="table" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="th-sm">id</th>
+                            <th class="th-sm">Nom</th>
+                            <th class="th-sm">Identifiant</th>
+                            <th class="th-sm">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%- for item in items -%}
+                        <tr>
+                            <td class="m-1">{{- item.id -}}</td>
+                            <td class="m-1">{{- item.name -}}</td>
+                            <td class="m-1">{{- item.identifier -}}</td>
+                            <td class="p-2">
+                                <button class="btn btn-primary dropdown-toggle btn-rounded-light btn-sm m-0" type="button" id="role-{{ item.id }}" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    <i class="far fa-edit"></i>
+                                </button>
+                                <!--Menu-->
+                                <div class="dropdown-menu dropdown-primary">
+                                    <a class="dropdown-item" href="{{ path('module', {'moduleId': item.id}) }}">Modifier</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {%- endfor -%}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nom</th>
+                            <th>Identifiant</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Central Modal Small -->
+{% endblock %}
