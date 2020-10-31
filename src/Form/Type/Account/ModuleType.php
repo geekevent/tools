@@ -2,18 +2,18 @@
 
 namespace App\Form\Type\Account;
 
-use App\Entity\Account\Role;
+use App\Entity\Account\Module;
 use App\Form\AbstractFormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class RoleType extends AbstractFormType
+class ModuleType extends AbstractFormType
 {
     public function __construct()
     {
-        $this->className = Role::class;
-        $this->tokenId = 'role_token';
+        $this->className = Module::class;
+        $this->tokenId = 'module_token';
     }
 
     /**
@@ -25,10 +25,20 @@ class RoleType extends AbstractFormType
         $builder
             ->add('name', TextType::class,
                 [
-                    'help' => 'Nom du rôle',
+                    'help' => 'Indiquez le nom du module',
                     'attr' => [
                         'length' => 10,
                     ],
+                ]
+            )
+            ->add('identifier', TextType::class,
+                [
+                    'help' => 'Identifiant du module',
+                    'attr' => [
+                        'length' => 10,
+                        'disabled' => true,
+                    ],
+                    'mapped' => false,
                 ]
             )
             ->add('save', SubmitType::class, ['label' => 'Create'])

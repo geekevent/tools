@@ -10,3 +10,31 @@
 .btn-rounded-light {
     border-radius: 10px;
 }
+
+.border-grey {
+    border-color: dimgrey;
+}
+
+.navbar-button {
+
+}
+
+.nav-item-with-sub-menu {
+    padding: 0 !important;
+}
+
+.sub-menu-button {
+    padding: 8px;
+}
+
+.sub-menu-hidden {
+    display: none;
+}
+
+.sub-menu-show {
+    display: block;
+}
+
+.navbar-button:hover, .navbar-button.active {
+    background-color: rgba(0,0,0,0.10) !important;
+}

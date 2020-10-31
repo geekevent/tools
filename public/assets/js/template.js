@@ -60,4 +60,38 @@
         }
     });
 
+    $('.sub-menu-button').on('click', function (e) {
+        let element = $(e.target);
+        let icons = $(e.target).find('i.fas');
+        let icon = $(icons[0]) || null;
+        let parent = element.closest('.nav-item');
+        let menus = $(parent).find('.sub-menu');
+        if (menus[0] === undefined) {
+            return;
+        }
+
+
+        let item = $(menus[0]);
+        if (item.hasClass('sub-menu-hidden')) {
+            item
+                .removeClass('sub-menu-hidden')
+                .addClass('sub-menu-show');
+            if (icon) {
+                icon
+                    .removeClass('fa-sort-up')
+                    .addClass('fa-sort-down');
+            }
+        } else {
+            item
+                .addClass('sub-menu-hidden')
+                .removeClass('sub-menu-show');
+            if (icon) {
+                icon
+                    .removeClass('fa-sort-down')
+                    .addClass('fa-sort-up');
+            }
+        }
+
+    })
+
 })()

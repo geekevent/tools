@@ -1,0 +1,38 @@
+<ul class="custom-scrollbar navbar-nav mr-auto">
+    {%- for bloc in menu -%}
+        {%- if bloc is iterable -%}
+            <li class="p-2 text-left nav-item border-bottom border-grey text-dark nav-item-with-sub-menu">
+                <div class="navbar-button waves-effect sub-menu-button">{{bloc.title}} <i class="fas fa-sort-up"></i></div>
+                <div class="ml-3 sub-menu {% if bloc.active -%}sub-menu-show{% else -%}sub-menu-hidden{%- endif -%}">
+                    {% set last = bloc.route|last %}
+                    {%- for item in bloc.route -%}
+                        <a class="{%- if last != item -%}border-bottom border-grey {% endif -%}p-2 d-block nav-item navbar-button waves-effect text-dark {% if item.getOption('active') %}active{% endif %}" href="{{ item.path }}">{{ item.getOption('title') }}</a>
+                    {%- endfor -%}
+                </div>
+            </li>
+        {%- else -%}
+        {% endif %}
+    {%- endfor -%}
+{#    <a class="p-2 text-left nav-item border-bottom border-grey navbar-button waves-effect text-dark"#}
+{#       href="#"#}
+{#    >#}
+{#        Home#}
+{#    </a>#}
+{#    <a class="p-2 text-left nav-item border-bottom border-grey navbar-button waves-effect text-dark"#}
+{#       href="#"#}
+{#    >#}
+{#        Features#}
+{#    </a>#}
+{#    <li class="p-2 text-left nav-item border-bottom border-grey text-dark nav-item-with-sub-menu">#}
+{#        <div class="navbar-button waves-effect sub-menu-button">Paramètres <i class="fas fa-sort-up"></i></div>#}
+{#        <div class="ml-3 sub-menu sub-menu-hidden">#}
+{#            <a class="border-bottom border-grey p-2 d-block nav-item navbar-button waves-effect text-dark {% if app.request.attributes.get('_route') == 'role_list' %}active{% endif %}" href="{{ path('role_list') }}">Role</a>#}
+{#            <a class="p-2 d-block nav-item navbar-button waves-effect text-dark {% if app.request.attributes.get('_route') == 'module_list' %}active{% endif %}" href="{{ path('module_list') }}">Module</a>#}
+{#        </div>#}
+{#    </li>#}
+{#    <a class="p-2 text-left nav-item border-bottom border-grey navbar-button waves-effect text-dark"#}
+{#       href="#"#}
+{#    >#}
+{#        pouet#}
+{#    </a>#}
+</ul>

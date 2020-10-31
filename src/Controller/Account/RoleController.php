@@ -11,10 +11,20 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
+/** @Route("/roles", name="role") */
 class RoleController extends AbstractToolsController
 {
     /**
-     * @Route("/roles", methods={"GET"}, name="list_role")
+     * @Route(
+     *     "/",
+     *     methods={"GET"},
+     *     name="_list",
+     *     options={
+     *          "module": {"name":"parameters", "title": "Paramètres"},
+     *          "displayed": true,
+     *          "title": "Role"
+     *     }
+     * )
      */
     public function getRoles(Request $request): Response
     {
@@ -28,12 +38,14 @@ class RoleController extends AbstractToolsController
                 'form' => $form->createView(),
                 'items' => $this->findBy(Role::class, []),
                 'action' => '',
-            ]
+            ],
+            null,
+            $request
         );
     }
 
     /**
-     * @Route("/roles/{roleId}", methods={"GET"}, name="role")
+     * @Route("/{roleId}", methods={"GET"}, name="_details")
      */
     public function getRole(Request $request, int $roleId): Response
     {
@@ -52,12 +64,14 @@ class RoleController extends AbstractToolsController
                 'form' => $form->createView(),
                 'items' => $this->findBy(Role::class, []),
                 'action' => $role->getId(),
-            ]
+            ],
+            null,
+            $request
         );
     }
 
     /**
-     * @Route("/roles", methods={"POST"}, name="create_role")
+     * @Route("/", methods={"POST"}, name="_create")
      */
     public function createRole(Request $request): Response
     {
@@ -69,7 +83,7 @@ class RoleController extends AbstractToolsController
             $role = $form->getData();
             $this->save($role);
 
-            return $this->redirectToRoute('list_role');
+            return $this->redirectToRoute('role_list');
         }
 
         return $this->render(
@@ -78,12 +92,14 @@ class RoleController extends AbstractToolsController
                 'form' => $form->createView(),
                 'items' => $this->findBy(Role::class, []),
                 'action' => '',
-            ]
+            ],
+            null,
+            $request
         );
     }
 
     /**
-     * @Route("/roles/{roleId}", methods={"POST"}, name="update_role")
+     * @Route("/{roleId}", methods={"POST"}, name="_update")
      */
     public function updateRole(Request $request, int $roleId): Response
     {
@@ -98,7 +114,7 @@ class RoleController extends AbstractToolsController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->update();
 
-            return $this->redirectToRoute('list_role');
+            return $this->redirectToRoute('role_list');
         }
 
         return $this->render(
@@ -107,12 +123,14 @@ class RoleController extends AbstractToolsController
                 'form' => $form->createView(),
                 'items' => $this->findBy(Role::class, []),
                 'action' => $role->getId(),
-            ]
+            ],
+            null,
+            $request
         );
     }
 
     /**
-     * @Route("/roles/{roleId}/delete", methods={"GET"}, name="delete_role")
+     * @Route("/{roleId}/delete", methods={"GET"}, name="_delete")
      */
     public function deleteRole(Request $request, int $roleId): Response
     {
@@ -124,6 +142,6 @@ class RoleController extends AbstractToolsController
 
         $this->delete($role);
 
-        return $this->redirectToRoute('list_role');
+        return $this->redirectToRoute('role_list');
     }
 }

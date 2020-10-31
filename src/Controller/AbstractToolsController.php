@@ -3,8 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\AbstractEntity;
+use App\Service\MenuBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Router;
 
 abstract class AbstractToolsController extends AbstractController
 {
@@ -52,5 +56,24 @@ abstract class AbstractToolsController extends AbstractController
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
+    }
+
+    /**
+     * @param array<string, mixed> $parameters
+     */
+    protected function render(string $view, array $parameters = [], Response $response = null, ?Request $request = null): Response
+    {
+        if ($request) {
+            /** @var Router $router */
+            $router = $this->get('router');
+            $routeName = $request->attributes->get('_route');
+            $route = $router->getRouteCollection()->get($routeName);
+
+            $menuBuilder = new MenuBuilder($router, $route);
+            $menuBuilder->build();
+            $parameters['menu'] = $menuBuilder->menu;
+        }
+
+        return parent::render($view, $parameters, $response);
     }
 }
