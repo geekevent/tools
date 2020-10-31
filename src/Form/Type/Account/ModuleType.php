@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\Type\Account;
 
 use App\Entity\Account\Module;
@@ -23,7 +25,9 @@ class ModuleType extends AbstractFormType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class,
+            ->add(
+                'name',
+                TextType::class,
                 [
                     'help' => 'Indiquez le nom du module',
                     'attr' => [
@@ -31,7 +35,9 @@ class ModuleType extends AbstractFormType
                     ],
                 ]
             )
-            ->add('identifier', TextType::class,
+            ->add(
+                'identifier',
+                TextType::class,
                 [
                     'help' => 'Identifiant du module',
                     'attr' => [

@@ -1,0 +1,54 @@
+{% extends "/base.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="border border-light p-5 rgba-white-strong">
+                <p class="h4 mt-5">Assignation des roles / modules</p>
+                <form action="" method="post">
+                    <table class="text-center">
+                        <tr>
+                            <td class="border-bottom border-dark p-4">Module \ Rôle</td>
+                            {% set lastRole = roles|last %}
+                            {%- for role in roles -%}
+                                <td class="border border-dark p-4 {%- if role != lastRole -%}border-right-0{%- endif -%}">{{ role.name }}</td>
+                            {%- endfor -%}
+                        </tr>
+                        {%- for module in modules -%}
+                            <tr>
+                                <td class="border-left border-bottom border-dark p-4">{{ module.name }}</td>
+                                {%- for role in roles -%}
+                                    <td class="border-left border-bottom border-dark p-4 {% if role == lastRole -%}border-right{%- endif -%}">
+                                        <div class="custom-control custom-switch">
+                                            <input
+                                                    type="checkbox"
+                                                    class="custom-control-input"
+                                                    id="customSwitches{{- role.id -}}{{- module.id -}}"
+                                                    name="roles[{{- role.id -}}][]"
+                                                    value="{{- module.id -}}"
+                                                    {% if checkedModules[role.id][module.id] is defined -%}checked{%- endif %}
+                                            >
+                                            <label class="custom-control-label" for="customSwitches{{- role.id -}}{{- module.id -}}"></label>
+                                        </div>
+                                    </td>
+                                {%- endfor -%}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <div class="md-form">
+                        <button type="submit" name="save" class="btn btn-primary waves-effect waves-light">
+                            Sauvegarder
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Central Modal Small -->
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="/assets/js/modal.js"></script>
+{% endblock %}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Account;
 
 use App\Entity\AbstractEntity;
@@ -26,7 +28,7 @@ class Module extends AbstractEntity implements IdentifiedEntity
 
     /**
      * @var Collection<int, Role>
-     * @ORM\ManyToMany(targetEntity="App\Entity\Account\Role", inversedBy="modules")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Account\Role", mappedBy="modules")
      */
     private Collection $roles;
 
