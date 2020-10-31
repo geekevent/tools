@@ -43,12 +43,12 @@
                                 </button>
                                 <!--Menu-->
                                 <div class="dropdown-menu dropdown-primary">
-                                    <a class="dropdown-item" href="{{ path('role', {'roleId': item.id}) }}">Modifier</a>
+                                    <a class="dropdown-item" href="{{ path('role_details', {'roleId': item.id}) }}">Modifier</a>
                                     <a class="dropdown-item"
                                        data-toggle="modal"
                                        data-target="#deleteModal"
                                        data-name="{{ item.name }}"
-                                       data-route="{{ path('delete_role', {'roleId': item.id}) }}"
+                                       data-route="{{ path('role_delete', {'roleId': item.id}) }}"
                                     >Supprimer</a>
                                 </div>
                             </td>

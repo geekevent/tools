@@ -10,10 +10,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
+/** @Route("/modules", name="module") */
 class ModuleController extends AbstractToolsController
 {
     /**
-     * @Route("/modules", methods={"GET"}, name="list_module")
+     * @Route(
+     *     "/",
+     *     methods={"GET"},
+     *     name="_list",
+     *     options={
+     *          "module": {"name":"parameters", "title": "Paramètres"},
+     *          "displayed": true,
+     *          "title": "Module"
+     *     }
+     * )
      */
     public function getModules(Request $request): Response
     {
@@ -27,12 +37,14 @@ class ModuleController extends AbstractToolsController
                 'form' => $form->createView(),
                 'items' => $this->findBy(Module::class, []),
                 'action' => '',
-            ]
+            ],
+            null,
+            $request
         );
     }
 
     /**
-     * @Route("/modules/{moduleId}", methods={"GET"}, name="module")
+     * @Route("/{moduleId}", methods={"GET"}, name="_details")
      */
     public function getModule(Request $request, int $moduleId): Response
     {
@@ -52,12 +64,14 @@ class ModuleController extends AbstractToolsController
                 'form' => $form->createView(),
                 'items' => $this->findBy(Module::class, []),
                 'action' => $module->getId(),
-            ]
+            ],
+            null,
+            $request
         );
     }
 
     /**
-     * @Route("/modules/{moduleId}", methods={"POST"}, name="update_module")
+     * @Route("/{moduleId}", methods={"POST"}, name="_update")
      */
     public function createModule(Request $request, int $moduleId): Response
     {
@@ -82,7 +96,9 @@ class ModuleController extends AbstractToolsController
                 'form' => $form->createView(),
                 'items' => $this->findBy(Module::class, []),
                 'action' => $module->getId(),
-            ]
+            ],
+            null,
+            $request
         );
     }
 }

@@ -25,7 +25,7 @@ class RoleType extends AbstractFormType
         $builder
             ->add('name', TextType::class,
                 [
-                    'help' => 'ceci est une aide huhu',
+                    'help' => 'Nom du rôle',
                     'attr' => [
                         'length' => 10,
                     ],

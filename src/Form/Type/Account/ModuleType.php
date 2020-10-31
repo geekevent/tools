@@ -25,7 +25,7 @@ class ModuleType extends AbstractFormType
         $builder
             ->add('name', TextType::class,
                 [
-                    'help' => 'ceci est une aide huhu',
+                    'help' => 'Indiquez le nom du module',
                     'attr' => [
                         'length' => 10,
                     ],
@@ -33,7 +33,7 @@ class ModuleType extends AbstractFormType
             )
             ->add('identifier', TextType::class,
                 [
-                    'help' => 'ceci est une aide huhu',
+                    'help' => 'Identifiant du module',
                     'attr' => [
                         'length' => 10,
                         'disabled' => true,
