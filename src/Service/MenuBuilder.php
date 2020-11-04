@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use Symfony\Component\Routing\Route;
@@ -43,6 +45,7 @@ class MenuBuilder
                     $this->menu[$module['name']]['active'] = true;
                 }
                 $this->menu[$module['name']]['route'][$routeName] = $route;
+
                 continue;
             }
 

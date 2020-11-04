@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\AbstractEntity;
@@ -26,17 +28,15 @@ abstract class AbstractToolsController extends AbstractController
      *
      * @return object[]
      */
-    protected function findBy(string $className, array $criteria, ?array $order = null, ?int $limit = null, ?int $offset = null)
+    protected function findBy(string $className, array $criteria = [], ?array $order = null, ?int $limit = null, ?int $offset = null): array
     {
         return $this->getDoctrine()->getRepository($className)->findBy($criteria, $order, $limit, $offset);
     }
 
     /**
      * @param class-string<AbstractEntity> $className
-     *
-     * @return object|null
      */
-    protected function findOne(string $className, int $id)
+    protected function findOne(string $className, int $id): ?object
     {
         return $this->getDoctrine()->getRepository($className)->find($id);
     }

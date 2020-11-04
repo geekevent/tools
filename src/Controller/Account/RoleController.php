@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Account;
 
 use App\Controller\AbstractToolsController;
@@ -20,9 +22,9 @@ class RoleController extends AbstractToolsController
      *     methods={"GET"},
      *     name="_list",
      *     options={
-     *          "module": {"name":"parameters", "title": "Paramètres"},
-     *          "displayed": true,
-     *          "title": "Role"
+     *         "module": {"name": "parameters", "title": "Paramètres"},
+     *         "displayed": true,
+     *         "title": "Role"
      *     }
      * )
      */

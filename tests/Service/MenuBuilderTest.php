@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service;
 
 use App\Service\MenuBuilder;
@@ -21,7 +23,7 @@ class MenuBuilderTest extends KernelTestCase
     {
         $router = self::$kernel->getContainer()->get('router');
         if (!$router instanceof Router) {
-            throw new \InvalidArgumentException('get '.get_class($router).' instead of '.Router::class);
+            throw new \InvalidArgumentException('get '.\get_class($router).' instead of '.Router::class);
         }
 
         self::$router = $router;

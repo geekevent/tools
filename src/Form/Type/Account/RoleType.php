@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\Type\Account;
 
 use App\Entity\Account\Role;
@@ -23,7 +25,9 @@ class RoleType extends AbstractFormType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class,
+            ->add(
+                'name',
+                TextType::class,
                 [
                     'help' => 'Nom du rôle',
                     'attr' => [

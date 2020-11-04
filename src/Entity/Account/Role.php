@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Account;
 
 use App\Entity\AbstractEntity;
@@ -20,7 +22,7 @@ class Role extends AbstractEntity
 
     /**
      * @var Collection<int, Module>
-     * @ORM\ManyToMany(targetEntity="App\Entity\Account\Module", mappedBy="roles")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Account\Module", inversedBy="roles")
      */
     private Collection $modules;
 
@@ -65,6 +67,13 @@ class Role extends AbstractEntity
      */
     public function getModules(): Collection
     {
-        return$this->modules;
+        return $this->modules;
+    }
+
+    public function resetModules(): self
+    {
+        $this->modules = new ArrayCollection();
+
+        return $this;
     }
 }

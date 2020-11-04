@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Behat;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Account\Module;
+use App\Entity\Account\Role;
 use App\Entity\IdentifiedEntity;
 use App\Service\ModuleCreator;
 use Behat\Behat\Context\Context;
@@ -158,5 +162,27 @@ class RestContext implements Context
 
             $this->entity = $parts[1];
         }
+    }
+
+    /**
+     * @Then I found in :arg1 with :arg2 as id and with the module with id :arg3
+     */
+    public function iFoundInWithAsIdTheModuleWithId(string $arg1, int $arg2, int $arg3): void
+    {
+        /** @var class-string<mixed> $className */
+        $className = ClassFactory::getClass($arg1);
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        /** @var Role $item */
+        $item = $entityManager->getRepository($className)->findOneBy(['id' => $arg2]);
+        foreach ($item->getModules() as $module) {
+            if ($module->getId() === $arg3) {
+                Assert::assertTrue(true);
+
+                return;
+            }
+        }
+        // @phpstan-ignore-next-line
+        Assert::assertFalse(true);
     }
 }

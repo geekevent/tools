@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Account;
 
 use App\Controller\AbstractToolsController;
@@ -19,9 +21,9 @@ class ModuleController extends AbstractToolsController
      *     methods={"GET"},
      *     name="_list",
      *     options={
-     *          "module": {"name":"parameters", "title": "Paramètres"},
-     *          "displayed": true,
-     *          "title": "Module"
+     *         "module": {"name": "parameters", "title": "Paramètres"},
+     *         "displayed": true,
+     *         "title": "Module"
      *     }
      * )
      */
@@ -87,7 +89,7 @@ class ModuleController extends AbstractToolsController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->update();
 
-            return $this->redirectToRoute('list_module');
+            return $this->redirectToRoute('module_list');
         }
 
         return $this->render(
