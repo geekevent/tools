@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Behat;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Account\Account;
 use App\Entity\Account\Module;
 use App\Entity\Account\Role;
 use App\Entity\IdentifiedEntity;
@@ -19,6 +20,9 @@ use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\Assert;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class RestContext implements Context
@@ -30,6 +34,10 @@ class RestContext implements Context
     private ?string $token;
 
     private ?string $entity;
+
+    private ?Account $account;
+
+    private const JSON_CONTENT_PATH = '/features/payloads';
 
     public function __construct(KernelBrowser $browser, ContainerInterface $container)
     {
@@ -182,7 +190,106 @@ class RestContext implements Context
                 return;
             }
         }
-        // @phpstan-ignore-next-line
-        Assert::assertFalse(true);
+
+        throw new \InvalidArgumentException('no module found in role');
+    }
+
+    /**
+     * @Then I found a :arg1 with :arg2 as login
+     */
+    public function iFoundAWithAsLogin(string $arg1, string $arg2): void
+    {
+        /** @var class-string<mixed> $className */
+        $className = ClassFactory::getClass($arg1);
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        /** @var Account|null $account */
+        $account = $entityManager->getRepository($className)->findOneBy(['login' => $arg2]);
+        Assert::assertNotNull($account);
+    }
+
+    /**
+     * @When An account created
+     */
+    public function anAccountCreated(): void
+    {
+        $account = new Account();
+        $account
+            ->setLogin('test@test.test')
+            ->setFamilyName('foo')
+            ->setGivenName('bar')
+        ;
+
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        $entityManager->persist($account);
+        $entityManager->flush();
+        $this->account = $account;
+    }
+
+    /**
+     * @Then I found an acount with :arg1 as password
+     */
+    public function iFoundAnAcountWithAsPassword(string $arg1): void
+    {
+        $account = new Account();
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        /** @var UserPasswordEncoder $encoder */
+        $encoder = $this->container->get('security.password_encoder');
+        $password = $encoder->encodePassword($account, $arg1);
+        /** @var Account|null $account */
+        $account = $entityManager->getRepository(Account::class)->findOneBy(['password' => $password]);
+        Assert::assertNotNull($account);
+    }
+
+    /**
+     * @When I go to the reset password route with :arg1 as content
+     */
+    public function iGoToTheResetPasswordRouteWithAsContent(string $arg1): void
+    {
+        /** @var Router $router */
+        $router = $this->container->get('router');
+        $path = $router->generate('account_reset', [
+            'token' => $this->account->getResetToken(),
+        ]);
+
+        $parameters = $this->getJsonContent($arg1);
+
+        $parameters[$this->entity]['_token'] = $this->token;
+
+        $this->browser->request(
+            Request::METHOD_POST,
+            $path,
+            $parameters,
+            [],
+            [],
+            (string) json_encode($parameters)
+        );
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function getJsonContent(string $fileName): array
+    {
+        $rootDir = $this->container->getParameter('kernel.project_dir');
+        $fullyQualifiedFileName = $rootDir.self::JSON_CONTENT_PATH.'/'.$fileName.'.json';
+        if (!is_file($fullyQualifiedFileName)) {
+            return [];
+        }
+
+        $content = file_get_contents($fullyQualifiedFileName);
+        if (!$content) {
+            return  [];
+        }
+
+        $content = json_decode($content, true);
+
+        if (!$content) {
+            return [];
+        }
+
+        return $content;
     }
 }

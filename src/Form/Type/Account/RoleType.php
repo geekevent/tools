@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Type\Account;
 
 use App\Entity\Account\Role;
-use App\Form\AbstractFormType;
+use App\Form\Type\AbstractFormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;

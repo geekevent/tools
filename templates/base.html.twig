@@ -18,51 +18,8 @@
         {% endblock %}
     </head>
     <body class="container-fluid">
-        <div class="row">
-            <div class="col-12 border-bottom border-dark z-depth-2" id="nav-bar">
-                <div class="row">
-                    <div class="col-2 text-center">
-                        <a href="#"
-                           id="side-nav-control"
-                           data-activates="slide-out"
-                           class="btn button-collapse">
-                            <i class="fas fa-bars"></i>
-                        </a>
-                    </div>
-                    <div class="col-10">
-                        <h1 class="align-top mt-1 mb-0">Geek-Event</h1>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 full-height">
-                <div class="row inner-height">
-                    <div class="col-md-2 animated displayed peach-gradient border-right border-dark z-depth-2" id="side-nav">
-                        <div id="slide-out" class="side-nav side">
-                        <!-- Links -->
-                            <div class="row justify-content-center">
-                                <div class="col-6 account-section align-bottom">
-                                    <img class="rounded-circle z-depth-2 img-fluid" alt="100x100" src="https://mdbootstrap.com/img/Photos/Avatars/img%20(31).jpg"
-                                         data-holder-rendered="true">
-                                </div>
-                                <div class="col-12 mt-2">
-                                    <span>
-                                        my Beautiful account
-                                    </span>
-                                </div>
-                            </div>
-                            <hr class="my-1">
-                            {%- include 'menu.html.twig' with {menu : menu} -%}
-                            <!-- Links -->
-                        </div>
-                    </div>
-                    <div class="col-md-10 p-5 rgba-grey-slight" id="main-content">
-                        {% block body %}
-                        {% endblock %}
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        {% block template %}
+        {% endblock %}
         <!-- jQuery -->
         <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
         <!-- Bootstrap tooltips -->

@@ -1,10 +1,13 @@
 (function () {
     let eventEnded = true;
-    let navBarHeight = $('#nav-bar').height();
+    let navBarHeight = $('#nav-bar').height()
+    if (undefined === navBarHeight) {
+        navBarHeight = 0;
+    }
     let windowHeight = window.innerHeight;
     let sideBar = $('#side-nav');
     let mainContent = $('#main-content');
-
+    console.log((parseInt(windowHeight) - parseInt(navBarHeight)));
     $('.full-height').height((parseInt(windowHeight) - parseInt(navBarHeight))+'px');
     $('.inner-height').height('100%');
 

@@ -38,6 +38,7 @@ services:
       network_mode: bridge
       links:
         - mysql
+        - mail-server
       volumes:
         - .:/application
         - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
@@ -57,3 +58,16 @@ services:
       links:
         - mysql
       network_mode: bridge
+
+    mail-server:
+        image: tvial/docker-mailserver
+        container_name: ${PROJECT_NAME}-mail-server
+        hostname: mail
+        domainname: ${PROJECT_NAME}.local
+        ports:
+          - "25:25"
+          - "143:143"
+          - "465:465"
+          - "587:587"
+          - "993:993"
+        network_mode: bridge

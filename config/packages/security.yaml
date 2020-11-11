@@ -1,0 +1,18 @@
+security:
+    encoders:
+        App\Entity\Account\Account:
+            algorithm: sodium
+    providers:
+        db:
+            entity:
+                class: App\Entity\User
+                property: username
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            lazy: true
+            provider: db
+

@@ -35,6 +35,15 @@ abstract class AbstractToolsController extends AbstractController
 
     /**
      * @param class-string<AbstractEntity> $className
+     * @param array<mixed>                 $criteria
+     */
+    protected function findOneBy(string $className, array $criteria = []): ?object
+    {
+        return $this->getDoctrine()->getRepository($className)->findOneBy($criteria);
+    }
+
+    /**
+     * @param class-string<AbstractEntity> $className
      */
     protected function findOne(string $className, int $id): ?object
     {

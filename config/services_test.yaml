@@ -32,3 +32,14 @@ services:
 
     App\Tests\Behat\:
         resource: '../tests/Behat/*'
+
+    App\Event\:
+        resource: '../src/Event/*'
+        public: true
+        autoconfigure: true
+        autowire: true
+        tags: [ { name: 'doctrine.event_subscriber', connection: 'default' } ]
+
+    App\Service\Mailer\SendInBlueConfigurator:
+        arguments:
+            $apiKey: '%send_in_blue%'

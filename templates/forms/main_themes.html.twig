@@ -61,6 +61,7 @@
     {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
         {% set required = false %}
     {%- endif -%}
+    {%- set attr = attr|merge({'class': 'browser-default custom-select'}) -%}
     <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
         {%- if placeholder is not none -%}
             <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>
@@ -363,9 +364,9 @@
     {%- endif -%}
     <div{% with {attr: row_attr|merge({'class': 'md-form'})} %}{{ block('attributes') }}{% endwith %}>
         {{- form_label(form) -}}
-        {{- form_errors(form) -}}
         {{- form_widget(form, widget_attr) -}}
         {{- form_help(form) -}}
+        {{- form_errors(form) -}}
     </div>
 {%- endblock form_row -%}
 
@@ -410,11 +411,11 @@
 
 {%- block form_errors -%}
     {%- if errors|length > 0 -%}
-        <ul>
-            {%- for error in errors -%}
-                <li>{{ error.message }}</li>
-            {%- endfor -%}
-        </ul>
+        <div class="pt-1">
+        {%- for error in errors -%}
+            <small class="text-danger">{{ error.message|trans }}</small>
+        {%- endfor -%}
+        </div>
     {%- endif -%}
 {%- endblock form_errors -%}
 

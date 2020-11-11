@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    send_in_blue: '%env(SEND_IN_BLUE)%'
 
 services:
     # default configuration for services in *this* file
@@ -29,3 +30,14 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Event\:
+        resource: '../src/Event/*'
+        public: true
+        autoconfigure: true
+        autowire: true
+        tags: [ { name: 'doctrine.event_subscriber', connection: 'default' } ]
+
+    App\Service\Mailer\SendInBlueConfigurator:
+        arguments:
+            $apiKey: '%send_in_blue%'
