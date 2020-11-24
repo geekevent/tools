@@ -7,11 +7,14 @@
         <div class="col-12">
             <form class="border border-light p-5 rgba-white-strong" action="{{ action }}" method="POST">
                 <div class="row">
-                    <div class="col-4 text-center">
+                    <div class="col-12 text-center">
                         <p class="h4 mt-5">Ajouter un rôle</p>
                     </div>
                     <div class="col-4">
                         {{ form_row(form.name) }}
+                    </div>
+                    <div class="col-4">
+                        {{ form_row(form.identifier, {disabled: role.id != null}) }}
                     </div>
                     <div class="col-4">
                         {{ form_row(form.save) }}
@@ -28,6 +31,7 @@
                         <tr>
                             <th class="th-sm">id</th>
                             <th class="th-sm">Nom</th>
+                            <th class="th-sm">Identifiant</th>
                             <th class="th-sm">Action</th>
                         </tr>
                     </thead>
@@ -36,6 +40,7 @@
                         <tr>
                             <td class="m-1">{{- item.id -}}</td>
                             <td class="m-1">{{- item.name -}}</td>
+                            <td class="m-1">{{- item.identifier -}}</td>
                             <td class="p-2">
                                 <button class="btn btn-primary dropdown-toggle btn-rounded-light btn-sm m-0" type="button" id="role-{{ item.id }}" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
@@ -44,12 +49,14 @@
                                 <!--Menu-->
                                 <div class="dropdown-menu dropdown-primary">
                                     <a class="dropdown-item" href="{{ path('role_details', {'roleId': item.id}) }}">Modifier</a>
+                                    {% if item.deletable %}
                                     <a class="dropdown-item"
                                        data-toggle="modal"
                                        data-target="#deleteModal"
                                        data-name="{{ item.name }}"
                                        data-route="{{ path('role_delete', {'roleId': item.id}) }}"
                                     >Supprimer</a>
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>
@@ -59,6 +66,7 @@
                         <tr>
                             <th>Id</th>
                             <th>Nom</th>
+                            <th>Identifiant</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>

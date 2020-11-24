@@ -5,8 +5,8 @@ security:
     providers:
         db:
             entity:
-                class: App\Entity\User
-                property: username
+                class: App\Entity\Account\Account
+                property: login
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -15,4 +15,12 @@ security:
             anonymous: true
             lazy: true
             provider: db
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path: app_logout
+    access_control:
+        - { path: '^/admin', roles: ROLE_ADMIN }
+
 

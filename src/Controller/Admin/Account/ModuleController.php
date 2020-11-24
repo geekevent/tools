@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Account;
+namespace App\Controller\Admin\Account;
 
 use App\Controller\AbstractToolsController;
 use App\Entity\Account\Module;
@@ -12,12 +12,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/** @Route("/modules", name="module") */
+/** @Route("/admin/modules", name="module") */
 class ModuleController extends AbstractToolsController
 {
     /**
      * @Route(
-     *     "/",
+     *     "",
      *     methods={"GET"},
      *     name="_list",
      *     options={

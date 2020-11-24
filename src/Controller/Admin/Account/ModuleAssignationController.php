@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Account;
+namespace App\Controller\Admin\Account;
 
 use App\Controller\AbstractToolsController;
 use App\Entity\Account\Module;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/** @Route("/roles", name="module_assignation") */
+/** @Route("/admin/roles", name="module_assignation") */
 class ModuleAssignationController extends AbstractToolsController
 {
     /**

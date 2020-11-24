@@ -8,7 +8,6 @@ use App\Entity\AbstractEntity;
 use App\Entity\Account\Account;
 use App\Entity\Account\Module;
 use App\Entity\Account\Role;
-use App\Entity\IdentifiedEntity;
 use App\Service\ModuleCreator;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
@@ -39,6 +38,10 @@ class RestContext implements Context
 
     private const JSON_CONTENT_PATH = '/features/payloads';
 
+    private bool $logged = false;
+
+    private bool $init = false;
+
     public function __construct(KernelBrowser $browser, ContainerInterface $container)
     {
         $this->browser = $browser;
@@ -50,6 +53,7 @@ class RestContext implements Context
      */
     public function beforeScenario(BeforeScenarioScope $scope): void
     {
+        $this->before($scope);
         /** @var Registry $doctrine */
         $doctrine = $this->container->get('doctrine');
         $managers = $doctrine->getManagers();
@@ -60,6 +64,22 @@ class RestContext implements Context
                 $schemaTool->createSchema($manager->getMetadataFactory()->getAllMetadata());
             }
         }
+        $this->logged();
+    }
+
+    private function before(BeforeScenarioScope $scope): void
+    {
+        if ($this->init) {
+            return;
+        }
+
+        $tags = $scope->getFeature()->getTags();
+        foreach ($tags as $tag) {
+            $this->getEntity($tag);
+            $this->connect($tag);
+        }
+
+        $this->init = true;
     }
 
     /**
@@ -69,6 +89,7 @@ class RestContext implements Context
     {
         $parameters = (array) json_decode((string) $string, true);
         $parameters[$this->entity]['_token'] = $this->token;
+
         $this->browser->request(
             $method,
             $path,
@@ -105,12 +126,16 @@ class RestContext implements Context
     {
         /** @var class-string<mixed> $className */
         $className = ClassFactory::getClass($arg1);
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
-        $item = $entityManager->getRepository($className)->findOneBy(['name' => $arg2]);
+        $item = $this->findBy($className, ['name' => $arg2]);
 
         Assert::assertNotNull($item);
-        Assert::assertEquals($arg2, $item->getName());
+        if (method_exists($item, 'getName')) {
+            Assert::assertEquals($arg2, $item->getName());
+
+            return;
+        }
+
+        throw new \Exception('unknown function getName for object');
     }
 
     /**
@@ -120,10 +145,7 @@ class RestContext implements Context
     {
         /** @var class-string<mixed> $className */
         $className = ClassFactory::getClass($arg1);
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
-        /** @var AbstractEntity|null $item */
-        $item = $entityManager->getRepository($className)->findOneBy(['name' => $arg2]);
+        $item = $this->findBy($className, ['name' => $arg2]);
 
         Assert::assertNull($item);
     }
@@ -133,8 +155,7 @@ class RestContext implements Context
      */
     public function modulesAreInserted(): void
     {
-        /** @var EntityManager $entityManager */
-        $entityManager = $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getEntityManagerInterface();
         $moduleCreator = new ModuleCreator($entityManager);
         $moduleCreator->run();
     }
@@ -146,30 +167,12 @@ class RestContext implements Context
     {
         /** @var class-string<mixed> $className */
         $className = ClassFactory::getClass($arg1);
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
-        /** @var IdentifiedEntity $item */
-        $item = $entityManager->getRepository($className)->findOneBy(['id' => $arg3]);
-
-        Assert::assertEquals($arg2, $item->getIdentifier());
-    }
-
-    /** @BeforeScenario */
-    public function before(BeforeScenarioScope $event): void
-    {
-        $tags = $event->getFeature()->getTags();
-        foreach ($tags as $tag) {
-            if (!preg_match('/entity::/i', $tag)) {
-                continue;
-            }
-
-            $parts = explode('::', $tag);
-            if (!isset($parts[1])) {
-                continue;
-            }
-
-            $this->entity = $parts[1];
+        $item = $this->find($className, (int) $arg3);
+        if (method_exists($item, 'getIdentifier')) {
+            Assert::assertEquals($arg2, $item->getIdentifier());
         }
+
+        throw new \Exception('unknown function getIdentifier for object');
     }
 
     /**
@@ -179,10 +182,9 @@ class RestContext implements Context
     {
         /** @var class-string<mixed> $className */
         $className = ClassFactory::getClass($arg1);
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
         /** @var Role $item */
-        $item = $entityManager->getRepository($className)->findOneBy(['id' => $arg2]);
+        $item = $this->find($className, $arg2);
+
         foreach ($item->getModules() as $module) {
             if ($module->getId() === $arg3) {
                 Assert::assertTrue(true);
@@ -201,8 +203,7 @@ class RestContext implements Context
     {
         /** @var class-string<mixed> $className */
         $className = ClassFactory::getClass($arg1);
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getEntityManagerInterface();
         /** @var Account|null $account */
         $account = $entityManager->getRepository($className)->findOneBy(['login' => $arg2]);
         Assert::assertNotNull($account);
@@ -214,52 +215,66 @@ class RestContext implements Context
     public function anAccountCreated(): void
     {
         $account = new Account();
-        $account
-            ->setLogin('test@test.test')
-            ->setFamilyName('foo')
-            ->setGivenName('bar')
-        ;
+        /** @var Role $role */
+        $role = $this->createRole();
+        $this->persist($role);
+        $this->createAccount($account, $role);
+        $this->persist($account, true);
 
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
-        $entityManager->persist($account);
-        $entityManager->flush();
         $this->account = $account;
     }
 
     /**
-     * @Then I found an acount with :arg1 as password
+     * @Then I found an account with :arg1 as password
      */
     public function iFoundAnAcountWithAsPassword(string $arg1): void
     {
         $account = new Account();
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getEntityManagerInterface();
         /** @var UserPasswordEncoder $encoder */
         $encoder = $this->container->get('security.password_encoder');
         $password = $encoder->encodePassword($account, $arg1);
+
         /** @var Account|null $account */
         $account = $entityManager->getRepository(Account::class)->findOneBy(['password' => $password]);
         Assert::assertNotNull($account);
     }
 
     /**
-     * @When I go to the reset password route with :arg1 as content
+     * @When I go to the :arg1 route with :arg2 as method and :arg3 as content
      */
-    public function iGoToTheResetPasswordRouteWithAsContent(string $arg1): void
+    public function iGoToTheResetPasswordRouteWithAsContent(string $arg1, string $arg2, string $arg3): void
     {
         /** @var Router $router */
         $router = $this->container->get('router');
-        $path = $router->generate('account_reset', [
+        $path = $router->generate($arg1, [
             'token' => $this->account->getResetToken(),
         ]);
 
-        $parameters = $this->getJsonContent($arg1);
+        $parameters = $this->getJsonContent($arg3);
 
         $parameters[$this->entity]['_token'] = $this->token;
 
         $this->browser->request(
-            Request::METHOD_POST,
+            $arg2,
+            $path,
+            $parameters,
+            [],
+            [],
+            (string) json_encode($parameters)
+        );
+    }
+
+    /**
+     * @When I go to the :path path with :arg2 as method and :arg3 as content
+     */
+    public function iGoToThePathWithAsContent(string $path, string $arg2, string $arg3): void
+    {
+        $parameters = $this->getJsonContent($arg3);
+        $parameters[$this->entity]['_token'] = $this->token;
+
+        $this->browser->request(
+            $arg2,
             $path,
             $parameters,
             [],
@@ -291,5 +306,109 @@ class RestContext implements Context
         }
 
         return $content;
+    }
+
+    private function getEntity(string $tag): void
+    {
+        if (!preg_match('/entity::/i', $tag)) {
+            return;
+        }
+
+        $parts = explode('::', $tag);
+        if (!isset($parts[1])) {
+            return;
+        }
+
+        $this->entity = $parts[1];
+    }
+
+    private function connect(string $tag): void
+    {
+        if ('logged' !== $tag) {
+            return;
+        }
+
+        $this->logged = true;
+    }
+
+    private function logged(): void
+    {
+        if (!$this->logged) {
+            return;
+        }
+        $clearPassword = '%X12345678';
+        $account = new Account();
+        /** @var UserPasswordEncoder $encoder */
+        $encoder = $this->container->get('security.password_encoder');
+        $password = $encoder->encodePassword($account, $clearPassword);
+        $role = $this->createRole();
+        $this->createAccount($account, $role);
+        $account->setPassword($password);
+
+        $this->persist($role);
+        $this->persist($account, true);
+        $this->browser->loginUser($account);
+    }
+
+    private function createAccount(Account $account, Role $role): void
+    {
+        $account
+            ->setLogin('admin@admin.com')
+            ->setRole($role)
+            ->setGivenName('Admin')
+            ->setFamilyName('admin')
+        ;
+    }
+
+    private function createRole(): Role
+    {
+        $role = new Role();
+        $role
+            ->setIdentifier('ROLE_ADMIN')
+            ->setName('ROLE_ADMIN')
+        ;
+
+        return $role;
+    }
+
+    private function persist(AbstractEntity $object, bool $flush = false): void
+    {
+        $entityManager = $this->getEntityManagerInterface();
+        $entityManager->persist($object);
+        if ($flush) {
+            $entityManager->flush();
+        }
+    }
+
+    /**
+     * @param class-string<mixed> $class
+     */
+    private function find(string $class, int $id): ?AbstractEntity
+    {
+        $entityManager = $this->getEntityManagerInterface();
+
+        return $entityManager->getRepository($class)->find($id);
+    }
+
+    private function getEntityManagerInterface(): EntityManagerInterface
+    {
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = $this->container->get('doctrine.orm.entity_manager');
+
+        return $entityManager;
+    }
+
+    /**
+     * @param class-string<mixed> $className
+     * @param array<mixed, mixed> $criteria
+     */
+    private function findBy(string $className, array $criteria): ?AbstractEntity
+    {
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->getEntityManagerInterface();
+        /** @var AbstractEntity|null $item */
+        $item = $entityManager->getRepository($className)->findOneBy($criteria);
+
+        return $item;
     }
 }

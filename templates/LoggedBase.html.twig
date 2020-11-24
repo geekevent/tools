@@ -13,7 +13,7 @@
                     </a>
                 </div>
                 <div class="col-10">
-                    <h1 class="align-top mt-1 mb-0">Geek-Event</h1>
+                    <a href="{{ path('home') }}" class="text-dark"><h1 class="align-top mt-1 mb-0">Geek-Event</h1></a>
                 </div>
             </div>
         </div>
@@ -27,9 +27,9 @@
                                 <img class="rounded-circle z-depth-2 img-fluid" alt="100x100" src="https://mdbootstrap.com/img/Photos/Avatars/img%20(31).jpg"
                                      data-holder-rendered="true">
                             </div>
-                            <div class="col-12 mt-2">
+                            <div class="col-12 mt-2 text-center">
                                     <span>
-                                        my Beautiful account
+                                        {{ app.user.givenName }} {{ app.user.familyName|upper }}
                                     </span>
                             </div>
                         </div>

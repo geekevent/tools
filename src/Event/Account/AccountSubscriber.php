@@ -58,7 +58,7 @@ class AccountSubscriber implements EventSubscriber
 
     public function postFlush(PostFlushEventArgs $args): void
     {
-        if ('test' === $_ENV['APP_ENV']) {
+        if (empty($this->emails) || 'test' === $_ENV['APP_ENV']) {
             return;
         }
 

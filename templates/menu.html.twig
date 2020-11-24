@@ -12,7 +12,7 @@
             </li>
         {%- else -%}
             {% set last = menu|last %}
-            <a class="p-2 text-left nav-item {%- if last != bloc -%}border-bottom border-grey {% endif -%} navbar-button waves-effect text-dark {% if bloc.getOption('active') %}active{% endif %}" href="{{ bloc.path }}"
+            <a class="p-2 text-left nav-item {% if last != bloc -%}border-bottom border-grey {% endif -%} navbar-button waves-effect text-dark {% if bloc.getOption('active') %}active{% endif %}" href="{{ bloc.path }}"
                    href="{{ bloc.path }}"
                 >
                 {{ bloc.getOption('title') }}

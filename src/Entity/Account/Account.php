@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class Account extends AbstractEntity implements UserInterface, \Serializable
 {
     /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private ?string $password = null;
 
@@ -172,7 +172,7 @@ class Account extends AbstractEntity implements UserInterface, \Serializable
 
     public function getRoles()
     {
-        return [];
+        return [$this->role->getIdentifier()];
     }
 
     public function getSalt()

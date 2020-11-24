@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Account;
+namespace App\Controller\Admin\Account;
 
 use App\Controller\AbstractToolsController;
 use App\Entity\Account\Account;
@@ -13,12 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/** @Route("/accounts", name="account") */
+/** @Route("/admin/accounts", name="account") */
 class AccountController extends AbstractToolsController
 {
     /**
      * @Route(
-     *     "/",
+     *     "",
      *     methods={"GET"},
      *     name="_list",
      *     options={
@@ -47,7 +47,7 @@ class AccountController extends AbstractToolsController
 
     /**
      * @Route(
-     *     "/",
+     *     "",
      *     methods={"POST"},
      *     name="_create"
      * )

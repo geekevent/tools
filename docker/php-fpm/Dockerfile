@@ -12,7 +12,8 @@ RUN apt-get update \
 # Install git
 RUN apt-get update \
     && apt-get -y install git wget libsodium-dev zip unzip libzip-dev \
-    libpcre3-dev sqlite3 libsqlite3-dev msmtp mailutils \
+    libpcre3-dev sqlite3 libsqlite3-dev \
+     libjpeg-dev libpng-dev \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 RUN docker-php-ext-install \
@@ -20,7 +21,8 @@ RUN docker-php-ext-install \
     pdo \
     pdo_mysql \
     pdo_sqlite \
-    zip
+    zip \
+    gd
 
 
 #RUN pecl install xdebug \
