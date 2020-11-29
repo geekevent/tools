@@ -44,7 +44,7 @@ class ModuleType extends AbstractFormType
                         'length' => 10,
                         'disabled' => true,
                     ],
-                    'mapped' => false,
+                    'mapped' => !$options['update'],
                 ]
             )
             ->add('save', SubmitType::class, ['label' => 'Create'])

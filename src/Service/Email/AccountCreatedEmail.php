@@ -30,7 +30,7 @@ class AccountCreatedEmail
         $tokenGenerator = new UriSafeTokenGenerator();
         $token = $tokenGenerator->generateToken();
         $route = $this->router->generate(
-            'account_reset',
+            'app_reset',
             [
                 'token' => $token,
             ],

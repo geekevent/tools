@@ -3,7 +3,6 @@
 Feature: Module
   Main scenario for module CRUD
 
-
   Scenario: module creation
     When modules are inserted
     And a token for "module_token"

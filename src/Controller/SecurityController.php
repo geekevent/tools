@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Account\Account;
+use App\Form\Type\Account\PasswordResetType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class SecurityController extends AbstractController
+/** @Route("", name="app") */
+class SecurityController extends AbstractToolsController
 {
     /**
-     * @Route("/login", name="app_login")
+     * @Route("/login", name="_login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -36,7 +40,41 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/logout", name="app_logout")
+     * @Route(
+     *     "/{token}",
+     *     methods={"get", "post"},
+     *     name="_reset"
+     * )
+     */
+    public function resetPassword(Request $request, string $token): Response
+    {
+        /** @var Account|null $account */
+        $account = $this->findOneBy(Account::class, ['resetToken' => $token]);
+
+        if (null === $account) {
+            throw new NotFoundHttpException('Aucun compte associé a ce token');
+        }
+        $form = $this->createForm(PasswordResetType::class, $account);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $account->setResetToken(null);
+            $this->update();
+        }
+
+        return $this->render(
+            'Account/PasswordReset.html.twig',
+            [
+                'isNew' => null === $account->getPassword(),
+                'form' => $form->createView(),
+            ],
+            null,
+            $request
+        );
+    }
+
+    /**
+     * @Route("/logout", name="_logout")
      */
     public function logout(): Response
     {

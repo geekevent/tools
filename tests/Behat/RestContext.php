@@ -170,6 +170,8 @@ class RestContext implements Context
         $item = $this->find($className, (int) $arg3);
         if (method_exists($item, 'getIdentifier')) {
             Assert::assertEquals($arg2, $item->getIdentifier());
+
+            return;
         }
 
         throw new \Exception('unknown function getIdentifier for object');
@@ -225,19 +227,16 @@ class RestContext implements Context
     }
 
     /**
-     * @Then I found an account with :arg1 as password
+     * @Then I found the account with id :arg2 and :arg1 as password
      */
-    public function iFoundAnAcountWithAsPassword(string $arg1): void
+    public function iFoundAnAccountWithAsPassword(string $arg1, string $arg2): void
     {
-        $account = new Account();
-        $entityManager = $this->getEntityManagerInterface();
-        /** @var UserPasswordEncoder $encoder */
-        $encoder = $this->container->get('security.password_encoder');
-        $password = $encoder->encodePassword($account, $arg1);
+        $encoder = $this->getEncoder();
 
         /** @var Account|null $account */
-        $account = $entityManager->getRepository(Account::class)->findOneBy(['password' => $password]);
+        $account = $this->find(Account::class, (int) $arg2);
         Assert::assertNotNull($account);
+        Assert::assertTrue($encoder->isPasswordValid($account, $arg1));
     }
 
     /**
@@ -338,8 +337,8 @@ class RestContext implements Context
         }
         $clearPassword = '%X12345678';
         $account = new Account();
-        /** @var UserPasswordEncoder $encoder */
-        $encoder = $this->container->get('security.password_encoder');
+
+        $encoder = $this->getEncoder();
         $password = $encoder->encodePassword($account, $clearPassword);
         $role = $this->createRole();
         $this->createAccount($account, $role);
@@ -410,5 +409,13 @@ class RestContext implements Context
         $item = $entityManager->getRepository($className)->findOneBy($criteria);
 
         return $item;
+    }
+
+    protected function getEncoder(): UserPasswordEncoder
+    {
+        /** @var UserPasswordEncoder $encoder */
+        $encoder = $this->container->get('security.password_encoder');
+
+        return $encoder;
     }
 }

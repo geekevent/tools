@@ -82,7 +82,9 @@ class RoleController extends AbstractToolsController
     {
         $role = new Role();
 
-        $form = $this->createForm(RoleType::class, $role);
+        $form = $this->createForm(RoleType::class, $role, [
+            'update' => false,
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $role = $form->getData();
