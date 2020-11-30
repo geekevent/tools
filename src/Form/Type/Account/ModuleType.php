@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Type\Account;
 
 use App\Entity\Account\Module;
-use App\Form\AbstractFormType;
+use App\Form\Type\AbstractFormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -44,7 +44,7 @@ class ModuleType extends AbstractFormType
                         'length' => 10,
                         'disabled' => true,
                     ],
-                    'mapped' => false,
+                    'mapped' => !$options['update'],
                 ]
             )
             ->add('save', SubmitType::class, ['label' => 'Create'])

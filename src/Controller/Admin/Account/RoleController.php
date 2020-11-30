@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Account;
+namespace App\Controller\Admin\Account;
 
 use App\Controller\AbstractToolsController;
 use App\Entity\Account\Role;
@@ -13,12 +13,12 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/** @Route("/roles", name="role") */
+/** @Route("/admin/roles", name="role") */
 class RoleController extends AbstractToolsController
 {
     /**
      * @Route(
-     *     "/",
+     *     "",
      *     methods={"GET"},
      *     name="_list",
      *     options={
@@ -38,6 +38,7 @@ class RoleController extends AbstractToolsController
             'Account/Roles.html.twig',
             [
                 'form' => $form->createView(),
+                'role' => $role,
                 'items' => $this->findBy(Role::class, []),
                 'action' => '',
             ],
@@ -58,12 +59,14 @@ class RoleController extends AbstractToolsController
         }
 
         $form = $this->createForm(RoleType::class, $role);
+        $form->get('identifier')->setData($role->getIdentifier());
         $form->handleRequest($request);
 
         return $this->render(
             'Account/Roles.html.twig',
             [
                 'form' => $form->createView(),
+                'role' => $role,
                 'items' => $this->findBy(Role::class, []),
                 'action' => $role->getId(),
             ],
@@ -73,13 +76,15 @@ class RoleController extends AbstractToolsController
     }
 
     /**
-     * @Route("/", methods={"POST"}, name="_create")
+     * @Route("", methods={"POST"}, name="_create")
      */
     public function createRole(Request $request): Response
     {
         $role = new Role();
 
-        $form = $this->createForm(RoleType::class, $role);
+        $form = $this->createForm(RoleType::class, $role, [
+            'update' => false,
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $role = $form->getData();
@@ -92,6 +97,7 @@ class RoleController extends AbstractToolsController
             'Account/Roles.html.twig',
             [
                 'form' => $form->createView(),
+                'role' => $role,
                 'items' => $this->findBy(Role::class, []),
                 'action' => '',
             ],
@@ -123,6 +129,7 @@ class RoleController extends AbstractToolsController
             'Account/Roles.html.twig',
             [
                 'form' => $form->createView(),
+                'role' => $role,
                 'items' => $this->findBy(Role::class, []),
                 'action' => $role->getId(),
             ],

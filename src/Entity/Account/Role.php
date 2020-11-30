@@ -15,16 +15,29 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Role extends AbstractEntity
 {
+    public const ROLES = [
+        'ROLE_ADMIN' => 'Role admin',
+    ];
     /**
      * @ORM\Column(type="string", length=50, nullable=false, unique=true)
      */
     private string $name;
 
     /**
+     * @ORM\Column(type="string", length=50, nullable=false, unique=true, options={"default": "empty"})
+     */
+    private string $identifier;
+
+    /**
      * @var Collection<int, Module>
      * @ORM\ManyToMany(targetEntity="App\Entity\Account\Module", inversedBy="roles")
      */
     private Collection $modules;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false, options={"default": 1})
+     */
+    private bool $deletable = true;
 
     public function __construct()
     {
@@ -73,6 +86,30 @@ class Role extends AbstractEntity
     public function resetModules(): self
     {
         $this->modules = new ArrayCollection();
+
+        return $this;
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+    public function setIdentifier(string $identifier): self
+    {
+        $this->identifier = $identifier;
+
+        return $this;
+    }
+
+    public function isDeletable(): bool
+    {
+        return $this->deletable;
+    }
+
+    public function setDeletable(bool $deletable): self
+    {
+        $this->deletable = $deletable;
 
         return $this;
     }

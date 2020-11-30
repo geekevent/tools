@@ -1,6 +1,7 @@
 controllers:
     resource: ../../src/Controller/
     type: annotation
+    trailing_slash_on_root: true
 
 kernel:
     resource: ../../src/Kernel.php

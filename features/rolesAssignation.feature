@@ -1,26 +1,13 @@
 @entity::role
+@logged
 Feature: Role
   Add Module to Role
 
 
   Scenario: Role creation
     When a token for "role_token"
-    And I send a "POST" request to "/roles/" with body:
-      """
-      {
-        "role" : {
-          "name": "foo"
-        }
-      }
-    """
+    When I go to the "/admin/roles" path with "POST" as method and "role_create" as content
     When a token for "role_module_token"
     When modules are inserted
-    And I send a "POST" request to "/roles/modules" with body:
-      """
-      {
-        "roles": {
-          "1": [1]
-        }
-      }
-    """
+    When I go to the "/admin/roles/modules" path with "POST" as method and "module_role" as content
     Then I found in "role" with 1 as id and with the module with id 1

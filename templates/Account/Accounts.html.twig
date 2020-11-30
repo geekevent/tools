@@ -1,0 +1,66 @@
+{% extends "/LoggedBase.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+
+    <div class="row">
+        <div class="col-12">
+            <form class="border border-light p-5 rgba-white-strong" action="{{ action }}" method="POST">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <p class="h4 mt-5">Ajouter un compte</p>
+                    </div>
+                    <div class="col-6">
+                        {{ form_row(form.givenName) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_row(form.familyName) }}
+                    </div>
+                    <div class="col-4">
+                        {{ form_row(form.login) }}
+                    </div>
+                    <div class="col-4">
+                        {{ form_row(form.role) }}
+                    </div>
+                    <div class="col-4">
+                        {{ form_row(form.save) }}
+                        {{ form_row(form._token) }}
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-12 mt-5">
+            <div class="border border-light p-5 rgba-white-strong">
+                Liste des rôles
+                <table id="role-table" class="table" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="th-sm">login</th>
+                            <th class="th-sm">Prénom</th>
+                            <th class="th-sm">Nom</th>
+                            <th class="th-sm">Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%- for item in items -%}
+                        <tr>
+                            <td class="m-1">{{- item.login -}}</td>
+                            <td class="m-1">{{- item.givenName -}}</td>
+                            <td class="m-1">{{- item.familyName -}}</td>
+                            <td class="m-1">{{- item.role.name -}}</td>
+                        </tr>
+                        {%- endfor -%}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="th-sm">login</th>
+                            <th class="th-sm">Prénom</th>
+                            <th class="th-sm">Nom</th>
+                            <th class="th-sm">Role</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Account;
+namespace App\Controller\Admin\Account;
 
 use App\Controller\AbstractToolsController;
 use App\Entity\Account\Module;
@@ -12,12 +12,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/** @Route("/modules", name="module") */
+/** @Route("/admin/modules", name="module") */
 class ModuleController extends AbstractToolsController
 {
     /**
      * @Route(
-     *     "/",
+     *     "",
      *     methods={"GET"},
      *     name="_list",
      *     options={
@@ -29,14 +29,9 @@ class ModuleController extends AbstractToolsController
      */
     public function getModules(Request $request): Response
     {
-        $module = new Module();
-        $form = $this->createForm(ModuleType::class, $module);
-        $form->handleRequest($request);
-
         return $this->render(
             'Account/Modules.html.twig',
             [
-                'form' => $form->createView(),
                 'items' => $this->findBy(Module::class, []),
                 'action' => '',
             ],
@@ -56,7 +51,9 @@ class ModuleController extends AbstractToolsController
             throw new NotFoundHttpException('Le module n\'existe pas');
         }
 
-        $form = $this->createForm(ModuleType::class, $module);
+        $form = $this->createForm(ModuleType::class, $module, [
+            'update' => true,
+        ]);
         $form->get('identifier')->setData($module->getIdentifier());
         $form->handleRequest($request);
 
@@ -84,7 +81,9 @@ class ModuleController extends AbstractToolsController
             throw new NotFoundHttpException('Le module n\'existe pas');
         }
 
-        $form = $this->createForm(ModuleType::class, $module);
+        $form = $this->createForm(ModuleType::class, $module, [
+            'update' => true,
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->update();

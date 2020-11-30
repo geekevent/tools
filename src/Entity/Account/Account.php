@@ -1,23 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Account;
 
 use App\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Table(name="account")
  * @ORM\Entity
+ * @UniqueEntity("login")
  */
-class Account extends AbstractEntity
+class Account extends AbstractEntity implements UserInterface, \Serializable
 {
     /**
-     * @ORM\Column(type="string", length=50, nullable=false, unique=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $password;
+    private ?string $password = null;
+
+    private ?string $plainPassword = null;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false, unique=true)
+     * @Assert\Email
      */
     private string $login;
 
@@ -40,14 +50,24 @@ class Account extends AbstractEntity
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private string $resetToken;
+    private ?string $resetToken;
 
-    public function getPassword(): string
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private string $givenName;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private string $familyName;
+
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
@@ -102,15 +122,103 @@ class Account extends AbstractEntity
         return $this;
     }
 
-    public function getResetToken(): string
+    public function getResetToken(): ?string
     {
         return $this->resetToken;
     }
 
-    public function setResetToken(string $resetToken): self
+    public function setResetToken(?string $resetToken): self
     {
         $this->resetToken = $resetToken;
 
         return $this;
+    }
+
+    public function getGivenName(): string
+    {
+        return $this->givenName;
+    }
+
+    public function setGivenName(string $givenName): self
+    {
+        $this->givenName = $givenName;
+
+        return $this;
+    }
+
+    public function getFamilyName(): string
+    {
+        return $this->familyName;
+    }
+
+    public function setFamilyName(string $familyName): self
+    {
+        $this->familyName = $familyName;
+
+        return $this;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function getRoles()
+    {
+        return [$this->role->getIdentifier()];
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function getUsername()
+    {
+        return $this->login;
+    }
+
+    public function eraseCredentials(): void
+    {
+        $this->plainPassword = null;
+    }
+
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->login,
+            $this->password,
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        [
+            $this->id,
+            $this->login,
+            $this->password,
+        ] = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context): void
+    {
+        if (null !== $this->plainPassword
+            && !preg_match('/^(?=.*[A-Z]+)(?=.*[0-9]+)(?=.*[%\-_@&^$€£!?;.=,+]+)[a-zA-Z0-9%\-_@&^$€£!?;.=,+]{8,}$/', $this->plainPassword)) {
+            $context->buildViolation('Le mot de passe ne respecte pas les règles')
+                ->atPath('plainPassword')
+                ->addViolation()
+            ;
+        }
     }
 }

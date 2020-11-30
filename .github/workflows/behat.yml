@@ -13,6 +13,8 @@ jobs:
         with:
           command: install
           dev: yes
+          file_name: .env.dist
+          envkey_APP_ENV: dev
       - name: php
         uses: shivammathur/setup-php@v2
         with:

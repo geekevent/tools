@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form;
+namespace App\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,6 +24,7 @@ abstract class AbstractFormType extends AbstractType
             // an arbitrary string used to generate the value of the token
             // using a different string for each form improves its security
             'csrf_token_id' => $this->tokenId,
+            'update' => false,
         ]);
     }
 }
