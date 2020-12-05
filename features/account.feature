@@ -3,7 +3,6 @@
 Feature: Account
   Main scenario for account
 
-
   Scenario: account creation
     When modules are inserted
     And a token for "account_creation_token"

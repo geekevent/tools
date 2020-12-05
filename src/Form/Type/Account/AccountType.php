@@ -14,10 +14,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class AccountType extends AbstractFormType
 {
+    protected string $buttonLabel;
+
     public function __construct()
     {
         $this->className = Account::class;
         $this->tokenId = 'account_creation_token';
+        $this->buttonLabel = 'Ajouter';
     }
 
     /**
@@ -70,7 +73,7 @@ class AccountType extends AbstractFormType
                     'help' => 'Role de l\'utilisateur',
                 ]
             )
-            ->add('save', SubmitType::class, ['label' => 'Create'])
+            ->add('save', SubmitType::class, ['label' => $this->buttonLabel])
         ;
     }
 }

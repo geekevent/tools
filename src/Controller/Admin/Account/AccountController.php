@@ -7,6 +7,7 @@ namespace App\Controller\Admin\Account;
 use App\Controller\AbstractToolsController;
 use App\Entity\Account\Account;
 use App\Form\Type\Account\AccountType;
+use App\Form\Type\Account\MyAccountType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -68,6 +69,38 @@ class AccountController extends AbstractToolsController
                 'form' => $form->createView(),
                 'items' => $this->findBy(Account::class, []),
                 'action' => '',
+            ],
+            null,
+            $request
+        );
+    }
+
+    /**
+     * @Route(
+     *     "/me",
+     *     methods={"GET", "POST"},
+     *     name="_me"
+     * )
+     */
+    public function me(Request $request): Response
+    {
+        /** @var Account $account */
+        $account = $this->getUser();
+        $form = $this->createForm(MyAccountType::class, $account);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!empty($account->getPlainPassword())) {
+                $account->setPassword(null);
+            }
+
+            $this->update();
+        }
+
+        return $this->render(
+            'Account/me.html.twig',
+            [
+                'form' => $form->createView(),
             ],
             null,
             $request
