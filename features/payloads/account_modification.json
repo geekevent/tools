@@ -1,0 +1,10 @@
+{
+  "my_account": {
+    "familyName": "Admin",
+    "givenName": "Admin",
+    "plainPassword": {
+      "first": "%ABC12345678",
+      "second": "%ABC12345678"
+    }
+  }
+}

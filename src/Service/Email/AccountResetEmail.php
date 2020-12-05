@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
 
-class AccountCreatedEmail
+class AccountResetEmail
 {
     private Mailer $mailer;
 
@@ -42,8 +42,8 @@ class AccountCreatedEmail
         return [
             'to' => $account->getLogin(),
             'from' => 'no-reply@geekevent.fr',
-            'subject' => 'création de compte',
-            'textContent' => 'cliquez ici pour activer votre compte :'.$route,
+            'subject' => 'récupération du compte',
+            'textContent' => 'cliquez ici pour modifier votre mot de passe :'.$route,
         ];
     }
 

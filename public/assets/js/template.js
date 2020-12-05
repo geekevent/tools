@@ -81,8 +81,8 @@
                 .addClass('sub-menu-show');
             if (icon) {
                 icon
-                    .removeClass('fa-sort-up')
-                    .addClass('fa-sort-down');
+                    .removeClass('fa-sort-down')
+                    .addClass('fa-sort-up');
             }
         } else {
             item
@@ -90,8 +90,8 @@
                 .removeClass('sub-menu-show');
             if (icon) {
                 icon
-                    .removeClass('fa-sort-down')
-                    .addClass('fa-sort-up');
+                    .removeClass('fa-sort-up')
+                    .addClass('fa-sort-down');
             }
         }
 
