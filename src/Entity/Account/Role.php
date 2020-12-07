@@ -17,6 +17,9 @@ class Role extends AbstractEntity
 {
     public const ROLES = [
         'ROLE_ADMIN' => 'Role admin',
+        'ROLE_ORGA' => 'Role orga',
+        'ROLE_CDP' => 'Role Chef de pôle',
+        'ROLE_STAFF' => 'Role Staff',
     ];
     /**
      * @ORM\Column(type="string", length=50, nullable=false, unique=true)

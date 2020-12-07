@@ -356,6 +356,7 @@ class RestContext implements Context
             ->setRole($role)
             ->setGivenName('Admin')
             ->setFamilyName('admin')
+            ->setValid(true)
         ;
     }
 

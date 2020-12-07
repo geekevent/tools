@@ -41,5 +41,9 @@ class MyAccountType extends AccountType
 
         $builder->get('login')->setDisabled(true);
         $builder->get('role')->setDisabled(true);
+        $builder->get('endDate')
+            ->setRequired(false)
+            ->setDisabled(true)
+        ;
     }
 }

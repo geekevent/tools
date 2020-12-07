@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\Account;
 
 use App\Entity\AbstractEntity;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Table(name="account")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Account\AccountRepository")
  * @UniqueEntity("login")
  */
 class Account extends AbstractEntity implements UserInterface, \Serializable
@@ -34,7 +35,7 @@ class Account extends AbstractEntity implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private \DateTime $endDate;
+    private ?DateTimeInterface $endDate = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Account\Role")
@@ -62,6 +63,11 @@ class Account extends AbstractEntity implements UserInterface, \Serializable
      */
     private string $familyName;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=false, options={"default": 1})
+     */
+    private bool $valid = true;
+
     public function getPassword(): ?string
     {
         return $this->password;
@@ -86,12 +92,12 @@ class Account extends AbstractEntity implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getEndDate(): \DateTime
+    public function getEndDate(): ?DateTimeInterface
     {
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTime $endDate): self
+    public function setEndDate(?DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
 
@@ -190,6 +196,18 @@ class Account extends AbstractEntity implements UserInterface, \Serializable
         $this->plainPassword = null;
     }
 
+    public function isValid(): bool
+    {
+        return $this->valid;
+    }
+
+    public function setValid(bool $valid): self
+    {
+        $this->valid = $valid;
+
+        return $this;
+    }
+
     public function serialize()
     {
         return serialize([
@@ -212,6 +230,23 @@ class Account extends AbstractEntity implements UserInterface, \Serializable
      * @Assert\Callback
      */
     public function validate(ExecutionContextInterface $context): void
+    {
+        $this->validatePlainPassword($context);
+
+        $this->validateEndDate($context);
+    }
+
+    private function validateEndDate(ExecutionContextInterface $context): void
+    {
+        if (null !== $this->endDate && $this->endDate <= new \DateTime()) {
+            $context->buildViolation('La date de fin doit être égale ou supérieur a la date du jour ')
+                ->atPath('endDate')
+                ->addViolation()
+            ;
+        }
+    }
+
+    private function validatePlainPassword(ExecutionContextInterface $context): void
     {
         if (null !== $this->plainPassword
             && !preg_match('/^(?=.*[A-Z]+)(?=.*[0-9]+)(?=.*[%\-_@&^$€£!?;.=,+]+)[a-zA-Z0-9%\-_@&^$€£!?;.=,+]{8,}$/', $this->plainPassword)) {

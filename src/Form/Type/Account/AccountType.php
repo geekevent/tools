@@ -8,6 +8,7 @@ use App\Entity\Account\Account;
 use App\Entity\Account\Role;
 use App\Form\Type\AbstractFormType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -73,7 +74,40 @@ class AccountType extends AbstractFormType
                     'help' => 'Role de l\'utilisateur',
                 ]
             )
+            ->add(
+                'endDate',
+                TextType::class,
+                [
+                    'label' => 'Date de fin de validité',
+                    'required' => true,
+                    'help' => 'Saisir la date au format dd/mm/yyyy',
+                ]
+            )
             ->add('save', SubmitType::class, ['label' => $this->buttonLabel])
+        ;
+
+        $builder
+            ->get('endDate')
+            ->addModelTransformer(
+                new CallbackTransformer(
+                function (?\DateTimeInterface $endDate) {
+                        if (null === $endDate) {
+                            return  null;
+                        }
+
+                        return $endDate->format('d/m/Y');
+                    },
+                function (?string $endDate) {
+                        if (null === $endDate) {
+                            return null;
+                        }
+
+                        $parts = explode('/', $endDate);
+
+                        return new \DateTime(sprintf('%s-%s-%s', $parts[0], $parts[1], $parts[2]));
+                    },
+            )
+            )
         ;
     }
 }
