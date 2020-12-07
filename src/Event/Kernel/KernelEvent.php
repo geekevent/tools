@@ -45,6 +45,10 @@ class KernelEvent implements EventSubscriberInterface
     public function onKernelController(RequestEvent $event): void
     {
         $token = $this->storage->getToken();
+        if (null === $token) {
+            return;
+        }
+
         $user = $token->getUser();
         if (!$user instanceof Account) {
             return;
