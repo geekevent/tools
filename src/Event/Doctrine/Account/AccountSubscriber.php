@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Event\Account;
+namespace App\Event\Doctrine\Account;
 
 use App\Entity\Account\Account;
 use App\Service\Email\AccountCreatedEmail;

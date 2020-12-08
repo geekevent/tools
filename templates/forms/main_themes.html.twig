@@ -118,13 +118,7 @@
     {%- if widget == 'single_text' -%}
         {{ block('form_widget_simple') }}
     {%- else -%}
-        <div {{ block('widget_container_attributes') }}>
-            {{- date_pattern|replace({
-                '{{ year }}':  form_widget(form.year),
-                '{{ month }}': form_widget(form.month),
-                '{{ day }}':   form_widget(form.day),
-            })|raw -}}
-        </div>
+        <input placeholder="Choisissez une date" id="{{ id }}" type="text" class="form-control">
     {%- endif -%}
 {%- endblock date_widget -%}
 
@@ -304,6 +298,9 @@
                 {% set label = name|humanize %}
             {%- endif -%}
         {%- endif -%}
+        {%- if required -%}
+            {% set label = label~'*' %}
+        {%- endif -%}
         <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>
         {%- if translation_domain is same as(false) -%}
             {%- if label_html is same as(false) -%}
@@ -362,7 +359,10 @@
     {%- if help is not empty -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
-    <div{% with {attr: row_attr|merge({'class': 'md-form'})} %}{{ block('attributes') }}{% endwith %}>
+    {%- if row_attr.class is not defined -%}
+        {% set row_attr = row_attr|merge({'class':'md-form'}) %}
+    {%- endif -%}
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
         {{- form_label(form) -}}
         {{- form_widget(form, widget_attr) -}}
         {{- form_help(form) -}}

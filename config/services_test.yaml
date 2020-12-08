@@ -34,8 +34,8 @@ services:
     App\Tests\Behat\:
         resource: '../tests/Behat/*'
 
-    App\Event\:
-        resource: '../src/Event/*'
+    App\Event\Doctrine\:
+        resource: '../src/Event/Doctrine/*'
         public: true
         autoconfigure: true
         autowire: true
@@ -44,3 +44,7 @@ services:
     App\Service\Mailer\SendInBlueConfigurator:
         arguments:
             $apiKey: '%send_in_blue%'
+
+    App\Repository\:
+        resource: '../src/Repository'
+        tags: [ 'doctrine.repository_service' ]

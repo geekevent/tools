@@ -31,8 +31,8 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Event\:
-        resource: '../src/Event/*'
+    App\Event\Doctrine\:
+        resource: '../src/Event/Doctrine/*'
         public: true
         autoconfigure: true
         autowire: true
@@ -41,3 +41,7 @@ services:
     App\Service\Mailer\SendInBlueConfigurator:
         arguments:
             $apiKey: '%send_in_blue%'
+
+    App\Repository\:
+        resource: '../src/Repository'
+        tags: ['doctrine.repository_service']

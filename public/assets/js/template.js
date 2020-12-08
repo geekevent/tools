@@ -7,7 +7,6 @@
     let windowHeight = window.innerHeight;
     let sideBar = $('#side-nav');
     let mainContent = $('#main-content');
-    console.log((parseInt(windowHeight) - parseInt(navBarHeight)));
     $('.full-height').height((parseInt(windowHeight) - parseInt(navBarHeight))+'px');
     $('.inner-height').height('100%');
 
@@ -94,7 +93,5 @@
                     .addClass('fa-sort-down');
             }
         }
-
     })
-
 })()
