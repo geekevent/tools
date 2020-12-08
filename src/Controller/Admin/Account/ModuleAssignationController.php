@@ -22,7 +22,8 @@ class ModuleAssignationController extends AbstractToolsController
      *     options={
      *         "module": {"name": "parameters", "title": "Paramètres"},
      *         "displayed": true,
-     *         "title": "Assignation de module"
+     *         "title": "Assignation de module",
+     *         "require": "ROLE_ORGA"
      *     }
      * )
      */

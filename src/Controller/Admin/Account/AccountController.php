@@ -23,11 +23,12 @@ class AccountController extends AbstractToolsController
      *     name="_list",
      *     options={
      *         "displayed": true,
-     *         "title": "Compte"
+     *         "title": "Compte",
+     *         "require": "ROLE_STAFF"
      *     }
      * )
      */
-    public function getRoles(Request $request): Response
+    public function getAccounts(Request $request): Response
     {
         $account = new Account();
         $form = $this->createForm(AccountType::class, $account);

@@ -24,7 +24,8 @@ class RoleController extends AbstractToolsController
      *     options={
      *         "module": {"name": "parameters", "title": "Paramètres"},
      *         "displayed": true,
-     *         "title": "Role"
+     *         "title": "Role",
+     *         "require": "ROLE_ORGA"
      *     }
      * )
      */

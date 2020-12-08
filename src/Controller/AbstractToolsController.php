@@ -11,14 +11,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Security\Core\Security;
 
 abstract class AbstractToolsController extends AbstractController
 {
     protected EntityManagerInterface $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    private Security $security;
+
+    public function __construct(EntityManagerInterface $entityManager, Security $security)
     {
         $this->entityManager = $entityManager;
+        $this->security = $security;
     }
 
     /**
@@ -78,7 +82,7 @@ abstract class AbstractToolsController extends AbstractController
             $routeName = $request->attributes->get('_route');
             $route = $router->getRouteCollection()->get($routeName);
 
-            $menuBuilder = new MenuBuilder($router, $route);
+            $menuBuilder = new MenuBuilder($router, $route, $this->security);
             $menuBuilder->build();
             $parameters['menu'] = $menuBuilder->menu;
         }

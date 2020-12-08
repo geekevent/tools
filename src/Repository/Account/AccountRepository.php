@@ -10,7 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 
 /**
- * @extends ServiceEntityRepository<Account>
+ * @template TEntityClass of object
  */
 class AccountRepository extends ServiceEntityRepository implements UserLoaderInterface
 {

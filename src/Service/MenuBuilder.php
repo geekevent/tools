@@ -6,6 +6,7 @@ namespace App\Service;
 
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Security\Core\Security;
 
 class MenuBuilder
 {
@@ -16,10 +17,13 @@ class MenuBuilder
 
     private string $currentController;
 
-    public function __construct(Router $router, Route $currentRoute)
+    private Security $security;
+
+    public function __construct(Router $router, Route $currentRoute, Security $security)
     {
         $this->router = $router;
         $this->currentController = explode('::', $currentRoute->getDefault('_controller'))[0];
+        $this->security = $security;
     }
 
     public function build(): void
@@ -27,6 +31,10 @@ class MenuBuilder
         $routes = $this->router->getRouteCollection();
         foreach ($routes as $routeName => $route) {
             if (!$route->getOption('displayed')) {
+                continue;
+            }
+            $require = $route->getOption('require');
+            if (null !== $require && (!$this->security->getUser() || !$this->security->isGranted($require))) {
                 continue;
             }
 

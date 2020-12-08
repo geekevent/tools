@@ -23,7 +23,8 @@ class ModuleController extends AbstractToolsController
      *     options={
      *         "module": {"name": "parameters", "title": "Paramètres"},
      *         "displayed": true,
-     *         "title": "Module"
+     *         "title": "Module",
+     *         "require": "ROLE_ORGA"
      *     }
      * )
      */
