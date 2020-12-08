@@ -1,0 +1,6 @@
+- une table billet (id, code unique, montant, datetime de paiement, datetime validation, idFormule, idPerson, idEvent, idAccount(validation), valide)
+- une table option (id, nom, montant, description, image)
+- une table associative entre les option et les billet (idOption, idBillet)
+- une table formule (id, nom, description, image, montant)
+- une table personne (id, nom, prenom, mail)
+- une table transaction (dépendant de la méthode de paiement + adresse mail)
