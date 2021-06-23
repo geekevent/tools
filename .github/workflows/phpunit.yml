@@ -1,0 +1,29 @@
+name : phpunit
+
+on: ['pull_request']
+
+jobs:
+  phpunit:
+    name: phpunit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        uses: php-actions/composer@v2
+        with:
+          command: install
+          dev: yes
+          file_name: .env.dist
+          envkey_APP_ENV: dev
+      - name: php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: xdebug
+      - name: phpunit
+        run: vendor/bin/phpunit  --coverage-clover ./tests/logs/clover.xml
+      - name: Coveralls
+        run: vendor/bin/php-coveralls -v
+        env:
+          COVERALLS_RUN_LOCALLY: 1
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}

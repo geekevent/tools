@@ -1,0 +1,20 @@
+name : quality tools
+
+on: ['pull_request']
+
+jobs:
+  phpstan:
+    name: PHPStan
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: PHPStan
+        uses: docker://oskarstark/phpstan-ga:0.12.48
+        env:
+          REQUIRE_DEV: true
+        with:
+          args: analyse src tests --level=7

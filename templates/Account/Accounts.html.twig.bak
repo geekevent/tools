@@ -1,0 +1,132 @@
+{% extends "/LoggedBase.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+
+    <div class="row">
+        {%- if is_granted('ROLE_ORGA') -%}
+            <div class="col-12">
+                <form class="border border-light p-5 rgba-white-strong" action="{{ action }}" method="POST">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <p class="h4 mt-5">Ajouter un compte</p>
+                        </div>
+                        <div class="col-6">
+                            {{ form_row(form.givenName) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_row(form.familyName) }}
+                        </div>
+                        <div class="col-4">
+                            {{ form_row(form.login) }}
+                        </div>
+                        <div class="col-4">
+                            {{ form_row(form.role) }}
+                        </div>
+                        <div class="col-4">
+                            {{ form_row(form.endDate, {'row_attr': {'class': 'md-form input-with-post-icon datepicker'}}) }}
+                        </div>
+                        <div class="col-4">
+                            {{ form_row(form.save) }}
+                            {{ form_row(form._token) }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        {%- endif -%}
+        <div class="col-12 mt-5">
+            <t class="border border-light p-5 rgba-white-strong">
+                Liste des comptes
+                <table id="role-table" class="table" width="100%">
+                    <thead>
+                        <tr>
+                            {%- if is_granted('ROLE_ORGA') -%}
+                            <th class="th-sm">login</th>
+                            {%- endif -%}
+                            <th class="th-sm">Prénom</th>
+                            <th class="th-sm">Nom</th>
+                            <th class="th-sm">Role</th>
+                            {%- if is_granted('ROLE_ORGA') -%}
+                                <th class="th-sm">Valide</th>
+                                <th class="th-sm">fin de validité</th>
+                                <th class="th-sm">Action</th>
+                            {%- endif -%}
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%- for item in items -%}
+                        <tr>
+                            {%- if is_granted('ROLE_ORGA') -%}
+                            <td class="m-1">{{- item.login -}}</td>
+                            {%- endif -%}
+                            <td class="m-1">{{- item.givenName -}}</td>
+                            <td class="m-1">{{- item.familyName -}}</td>
+                            <td class="m-1">{{- item.role.name -}}</td>
+                            {%- if is_granted('ROLE_ORGA') -%}
+                                <td class="m-1">{%- if item.valid -%}Oui{%- else -%}Non{%- endif -%}</td>
+                                <td class="m-1">{%- if item.endDate -%}{{ item.endDate|date('m/d/Y') }}{%- endif -%}</td>
+                            <!--Menu-->
+                                <td class="p-2">
+                                    <button class="btn btn-primary dropdown-toggle btn-rounded-light btn-sm m-0" type="button" id="role-{{ item.id }}" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                        <i class="far fa-edit"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-primary">
+                                        <a class="dropdown-item"
+                                           data-toggle="modal"
+                                           data-target="#deleteModal"
+                                           data-name="{{ item.login }}"
+                                           data-route="{{ path('account_invalidate', {'accountId': item.id}) }}"
+                                        >Invalider</a>
+    -                                </div>
+                                </td>
+                            {%- endif -%}
+                        </tr>
+                        {%- endfor -%}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            {%- if is_granted('ROLE_ORGA') -%}
+                            <th class="th-sm">login</th>
+                            {%- endif -%}
+                            <th class="th-sm">Prénom</th>
+                            <th class="th-sm">Nom</th>
+                            <th class="th-sm">Role</th>
+                            {%- if is_granted('ROLE_ORGA') -%}
+                                <th class="th-sm">Valide</th>
+                                <th class="th-sm">fin de validité</th>
+                                <th class="th-sm">Action</th>
+                            {%- endif -%}
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Central Modal Small -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal"
+         aria-hidden="true">
+        <!-- Change class .modal-sm to change the size of the modal -->
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title w-100" id="myModalLabel">Voulez-vous invalider le compte "<span id="item-name"></span>"</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-primary btn-sm" data-dismiss="modal">Non</a>
+                    <a href="" id="link" class="btn btn-danger btn-sm">Oui</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Central Modal Small -->
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="/assets/js/modal.js"></script>
+{% endblock %}

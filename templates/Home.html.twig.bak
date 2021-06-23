@@ -1,0 +1,19 @@
+{% extends "/LoggedBase.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-5 col-sm-12 m-3 p-4 border border-light z-depth-2">
+            Les stats
+        </div>
+        <div class="col-md-5 col-sm-12 m-3 p-4 border border-light z-depth-2">
+            Versus
+        </div>
+        <div class="col-md-5 col-sm-12 m-3 p-4 border border-light z-depth-2">
+            Billeterie
+        </div>
+        <div class="col-md-5 col-sm-12 m-3 p-4 border border-light z-depth-2">
+            Staff
+        </div>
+    </div>
+{% endblock %}

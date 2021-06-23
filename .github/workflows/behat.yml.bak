@@ -1,0 +1,24 @@
+name : behat
+
+on: [pull_request]
+
+jobs:
+  phpunit:
+    name: behat
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        uses: php-actions/composer@v2
+        with:
+          command: install
+          dev: yes
+          file_name: .env.dist
+          envkey_APP_ENV: dev
+      - name: php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: xdebug
+      - name: behat
+        run: ./vendor/bin/behat

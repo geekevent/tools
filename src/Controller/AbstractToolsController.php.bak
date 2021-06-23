@@ -1,0 +1,92 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Controller;
+
+use App\Entity\AbstractEntity;
+use App\Service\MenuBuilder;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Security\Core\Security;
+
+abstract class AbstractToolsController extends AbstractController
+{
+    protected EntityManagerInterface $entityManager;
+
+    private Security $security;
+
+    public function __construct(EntityManagerInterface $entityManager, Security $security)
+    {
+        $this->entityManager = $entityManager;
+        $this->security = $security;
+    }
+
+    /**
+     * @param class-string<AbstractEntity> $className
+     * @param array<mixed>                 $criteria
+     * @param array<mixed>|null            $order
+     *
+     * @return object[]
+     */
+    protected function findBy(string $className, array $criteria = [], ?array $order = null, ?int $limit = null, ?int $offset = null): array
+    {
+        return $this->getDoctrine()->getRepository($className)->findBy($criteria, $order, $limit, $offset);
+    }
+
+    /**
+     * @param class-string<AbstractEntity> $className
+     * @param array<mixed>                 $criteria
+     */
+    protected function findOneBy(string $className, array $criteria = []): ?object
+    {
+        return $this->getDoctrine()->getRepository($className)->findOneBy($criteria);
+    }
+
+    /**
+     * @param class-string<AbstractEntity> $className
+     */
+    protected function findOne(string $className, int $id): ?object
+    {
+        return $this->getDoctrine()->getRepository($className)->find($id);
+    }
+
+    protected function save(AbstractEntity $entity): void
+    {
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+    }
+
+    protected function update(): void
+    {
+        $this->entityManager->flush();
+    }
+
+    protected function delete(AbstractEntity $entity): void
+    {
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param array<string, mixed> $parameters
+     */
+    protected function render(string $view, array $parameters = [], Response $response = null, ?Request $request = null): Response
+    {
+        if ($request) {
+            /** @var Router $router */
+            $router = $this->get('router');
+            $routeName = $request->attributes->get('_route');
+            $route = $router->getRouteCollection()->get($routeName);
+
+            $menuBuilder = new MenuBuilder($router, $route, $this->security);
+            $menuBuilder->build();
+            $parameters['menu'] = $menuBuilder->menu;
+        }
+
+        return parent::render($view, $parameters, $response);
+    }
+}
