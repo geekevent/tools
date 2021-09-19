@@ -37,9 +37,8 @@
 {%- endblock collection_widget -%}
 
 {%- block textarea_widget -%}
-    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+    <textarea class="form-control" {{ block('widget_attributes') }}>{{ value }}</textarea>
 {%- endblock textarea_widget -%}
-
 {%- block choice_widget -%}
     {% if expanded %}
         {{- block('choice_widget_expanded') -}}
@@ -363,15 +362,18 @@
         {% set row_attr = row_attr|merge({'class':'md-form'}) %}
     {%- endif -%}
     <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
-        {{- form_label(form) -}}
         {{- form_widget(form, widget_attr) -}}
+        {{- form_label(form) -}}
         {{- form_help(form) -}}
         {{- form_errors(form) -}}
     </div>
 {%- endblock form_row -%}
 
 {%- block button_row -%}
-    <div{% with {attr: row_attr|merge({'class': 'md-form'})} %}{{ block('attributes') }}{% endwith %}>
+    {%- if row_attr.class is not defined -%}
+        {% set row_attr = row_attr|merge({'class':'md-form'}) %}
+    {%- endif -%}
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
         {{- form_widget(form) -}}
     </div>
 {%- endblock button_row -%}

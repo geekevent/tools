@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="/assets/css/mdb.min.css">
+    <link rel="stylesheet" href="/assets/css/enigma.css">
+    {% block stylesheets %}
+    {% endblock %}
+</head>
+<body class="container-fluid" id="background">
+    <div class="row text-center mt-5 p-2">
+        <div class="col-md-3 d-xs-none"></div>
+        <div class="col-md-6 col-xs-12 p-2 content">
+            {{ message }}
+        </div>
+    </div>
+<!-- jQuery -->
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="/assets/js/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+<script type="text/javascript" src="/assets/js/addons/datatables.min.js"></script>
+<script type="text/javascript" src="/assets/js/template.js"></script>
+{% block javascripts %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% extends "/MinimalLoggedBase.html.twig" %}
+
+{% block main %}
+    {{ parent() }}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col text-center hp-35">
+                {{ space.name }}&nbsp;:&nbsp;
+                <span class="{{ gauge_class }}" id="gauge">{{ gauge }}</span>
+                Limite&nbsp;:&nbsp;<span id="gaugeMax">{{ space.gaugeMax }}</span>
+            </div>
+            {% if is_granted('ROLE_ORGA') %}
+            <div class="col">
+                <a class="btn btn-danger" href="{{ path('spaces_entry_reset', {id: space.id}) }}">Remise à zero</a>
+            </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <a class="col btn btn-success hp-50" onclick="add('{{ path(route) }}', 1, {{ space.id }})">
+                +1
+            </a>
+            <a class="col btn btn-danger hp-50" onclick="add('{{ path(route) }}', -1, {{ space.id }})">
+                -1
+            </a>
+        </div>
+        <div class="row">
+            <a class="col btn btn-success hp-50" onclick="add('{{ path(route) }}', 2, {{ space.id }})">
+                +2
+            </a>
+            <a class="col btn btn-danger hp-50" onclick="add('{{ path(route) }}', -2, {{ space.id }})">
+                -2
+            </a>
+        </div>
+        <div class="row">
+            <a class="col btn btn-success hp-50" onclick="add('{{ path(route) }}', 3, {{ space.id }})">
+                +3
+            </a>
+            <a class="col btn btn-danger hp-50" onclick="add('{{ path(route) }}', -3, {{ space.id }})">
+                -3
+            </a>
+        </div>
+        <div class="row">
+            <a class="col btn btn-success hp-50" onclick="add('{{ path(route) }}', 5, {{ space.id }})">
+                +5
+            </a>
+            <a class="col btn btn-danger hp-50" onclick="add('{{ path(route) }}', -5, {{ space.id }})">
+                -5
+            </a>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="/assets/js/stats.js"></script>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "/LoggedBase.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="row">
+        <div class="col">
+            <img src="{{ qr_code_url(url('main_home')) }}">
+            <img src="{{ qrCode.string() }}">
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -9,6 +9,7 @@ services:
       container_name: ${PROJECT_NAME}-mysql
       volumes:
         - ./var/docker/database:/var/lib/mysql
+        - ./docker/mysql/init:/docker-entrypoint-initdb.d
       environment:
         - MYSQL_DATABASE=${DB_NAME}
         - MYSQL_USER=${DB_USER}
@@ -26,7 +27,7 @@ services:
           - .:/application
           - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       environment:
-        - VIRTUAL_HOST=${PROJECT_NAME}.local
+        - VIRTUAL_HOST=${PROJECT_NAME}.nicolasmoral.fr
       network_mode: bridge
       expose:
         - 80
@@ -38,7 +39,6 @@ services:
       network_mode: bridge
       links:
         - mysql
-        - mail-server
       volumes:
         - .:/application
         - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
@@ -49,7 +49,7 @@ services:
       image: phpmyadmin/phpmyadmin
       container_name: ${PROJECT_NAME}-phpmyadmin
       environment:
-        - VIRTUAL_HOST=phpmyadmin.${PROJECT_NAME}.local
+        - VIRTUAL_HOST=phpmyadmin.${PROJECT_NAME}.nicolasmoral.fr
         - MYSQL_USERNAME=${DB_USER}
         - MYSQL_PASSWORD=${DB_PASSWORD}
         - PMA_USERNAME=${DB_USER}
@@ -58,16 +58,3 @@ services:
       links:
         - mysql
       network_mode: bridge
-
-    mail-server:
-        image: tvial/docker-mailserver
-        container_name: ${PROJECT_NAME}-mail-server
-        hostname: mail
-        domainname: ${PROJECT_NAME}.local
-        ports:
-          - "25:25"
-          - "143:143"
-          - "465:465"
-          - "587:587"
-          - "993:993"
-        network_mode: bridge

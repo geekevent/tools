@@ -38,3 +38,13 @@
 .navbar-button:hover, .navbar-button.active {
     background-color: rgba(0,0,0,0.10) !important;
 }
+
+.hp-50 {
+    font-size: 50px;
+    text-align: center;
+}
+
+.hp-35 {
+    font-size: 35px;
+    text-align: center;
+}
