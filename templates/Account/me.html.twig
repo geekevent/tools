@@ -1,11 +1,12 @@
 {% extends "/LoggedBase.html.twig" %}
 
+{% block title %}Mon compte{% endblock %}
 {% block body %}
     {{ parent() }}
 
     <div class="row">
         <div class="col-12">
-            <form class="border border-light p-5 rgba-white-strong" action="{{ path('account_me') }}" method="POST">
+            <form class="border border-light p-5 rgba-white-strong" action="{{ path('user_me') }}" method="POST">
                 <div class="row">
                     <div class="col-12 text-center">
                         <p class="h4 mt-5">Modifier mon compte</p>

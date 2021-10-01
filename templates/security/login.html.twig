@@ -1,4 +1,5 @@
 {% extends "/base.html.twig" %}
+{% block title %}Login{% endblock %}
 {% block template %}
     <div class="row peach-gradient full-height">
         <div class="col-12 inner-height">
@@ -8,10 +9,10 @@
                 </div>
             {% endfor %}
             <div class="row justify-content-center align-items-center">
-                <div class="col-6 mt-auto">
+                <div class="col-md-6 col-sm-12 mt-auto">
                     <div class="border border-light p-5 rgba-white-strong">
                         <form method="post">
-                            {% if error %}
+                            {% if error is defined and error %}
                                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                             {% endif %}
 
@@ -36,7 +37,7 @@
                             <button class="btn btn-lg btn-primary" type="submit">
                                 Connexion
                             </button>
-                            <a href="{{ path('app_reset') }}">Mot de passe oublié</a>
+                            <a href="{{ path('user_reset_token') }}">Mot de passe oublié</a>
                         </form>
                     </div>
                 </div>

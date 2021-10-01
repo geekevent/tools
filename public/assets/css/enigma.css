@@ -1,0 +1,27 @@
+#background {
+    height: 100vh;
+    width: 100%;
+    background-image: url("../export-min.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+#background-black {
+    background-color: black;
+}
+
+.content {
+    background-color: rgba(100, 100, 100, 0.85);
+    color: white;
+}
+
+.form-control {
+    color: white;
+}
+
+code {
+    background-color: white;
+    color: black;
+    padding: 5px;
+}

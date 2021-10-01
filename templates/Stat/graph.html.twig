@@ -1,0 +1,36 @@
+{% extends "/LoggedBase.html.twig" %}
+
+{% block title %}Graphique{% endblock %}
+{% block body %}
+    {{ parent() }}
+    <form method="" class="row">
+        <div class="col-6">
+            <div class="md-form">
+                <select name="date" class="browser-default custom-select">
+                    {% for date in dates %}
+                        <option value="{{ date|date('Y-m-d') }}" {% if date|date('Y-m-d') == selectedDate %}selected{% endif %}>{{ date|date('d/m/Y') }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-info">Actualisez</button>
+        </div>
+        <div class="col-12">
+            <div id="curve_chart" style="width: 900px; height: 500px"></div>
+        </div>
+    </form>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        let moment = [
+            ['Moment', 'jauge'],
+            {% for moment in moments %}
+            ['{{ moment.moment }}', {{ moment.gauge }}],
+            {% endfor %}
+        ];
+    </script>
+    <script type="text/javascript" src="/assets/js/chart.js"></script>
+{% endblock %}

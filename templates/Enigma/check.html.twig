@@ -1,0 +1,28 @@
+{% extends "/LoggedBase.html.twig" %}
+
+{% block title %}Verifier{% endblock %}
+{% block body %}
+    {{ parent() }}
+    <form method="post" action="" class="row">
+        <div class="col-6">
+            <div class="md-form">
+                <input class="form-control" type="text" name="email" id="email">
+                <label for="email">Email</label>
+            </div>
+        </div>
+        <div class="col-6">
+            <button type="submit" class="btn btn-info">Rechercher</button>
+        </div>
+    </form>
+    <div class="row">
+        {% for answer in answers %}
+            <div class="col-4">{{ answer.enigma.name }}</div>
+            <div class="col-4">{{ answer.code|upper }}</div>
+            <div class="col-4">{{ answer.email }}</div>
+        {% endfor %}
+    </div>
+    <!-- Central Modal Small -->
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

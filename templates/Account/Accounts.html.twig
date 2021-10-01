@@ -1,12 +1,12 @@
 {% extends "/LoggedBase.html.twig" %}
-
+{% block title %}Comptes{% endblock %}
 {% block body %}
     {{ parent() }}
 
     <div class="row">
         {%- if is_granted('ROLE_ORGA') -%}
             <div class="col-12">
-                <form class="border border-light p-5 rgba-white-strong" action="{{ action }}" method="POST">
+                <form class="border border-light p-5 rgba-white-strong" action="" method="POST">
                     <div class="row">
                         <div class="col-12 text-center">
                             <p class="h4 mt-5">Ajouter un compte</p>
@@ -21,10 +21,7 @@
                             {{ form_row(form.login) }}
                         </div>
                         <div class="col-4">
-                            {{ form_row(form.role) }}
-                        </div>
-                        <div class="col-4">
-                            {{ form_row(form.endDate, {'row_attr': {'class': 'md-form input-with-post-icon datepicker'}}) }}
+                            {{ form_row(form.roles) }}
                         </div>
                         <div class="col-4">
                             {{ form_row(form.save) }}
@@ -35,7 +32,7 @@
             </div>
         {%- endif -%}
         <div class="col-12 mt-5">
-            <t class="border border-light p-5 rgba-white-strong">
+            <div class="border border-light p-5 rgba-white-strong">
                 Liste des comptes
                 <table id="role-table" class="table" width="100%">
                     <thead>
@@ -47,8 +44,6 @@
                             <th class="th-sm">Nom</th>
                             <th class="th-sm">Role</th>
                             {%- if is_granted('ROLE_ORGA') -%}
-                                <th class="th-sm">Valide</th>
-                                <th class="th-sm">fin de validité</th>
                                 <th class="th-sm">Action</th>
                             {%- endif -%}
 
@@ -62,24 +57,16 @@
                             {%- endif -%}
                             <td class="m-1">{{- item.givenName -}}</td>
                             <td class="m-1">{{- item.familyName -}}</td>
-                            <td class="m-1">{{- item.role.name -}}</td>
+                            <td class="m-1">{{- item.displayRoles -}}</td>
                             {%- if is_granted('ROLE_ORGA') -%}
-                                <td class="m-1">{%- if item.valid -%}Oui{%- else -%}Non{%- endif -%}</td>
-                                <td class="m-1">{%- if item.endDate -%}{{ item.endDate|date('m/d/Y') }}{%- endif -%}</td>
                             <!--Menu-->
                                 <td class="p-2">
-                                    <button class="btn btn-primary dropdown-toggle btn-rounded-light btn-sm m-0" type="button" id="role-{{ item.id }}" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                        <i class="far fa-edit"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-primary">
-                                        <a class="dropdown-item"
-                                           data-toggle="modal"
-                                           data-target="#deleteModal"
-                                           data-name="{{ item.login }}"
-                                           data-route="{{ path('account_invalidate', {'accountId': item.id}) }}"
-                                        >Invalider</a>
-    -                                </div>
+                                    <a class="btn btn-primary btn-rounded-light btn-sm m-0" href="{{ path('user_update', { id : item.id}) }}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a class="btn btn-danger btn-rounded-light btn-sm m-0" href="{{ path('user_delete', { id : item.id}) }}">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
                                 </td>
                             {%- endif -%}
                         </tr>
@@ -94,8 +81,6 @@
                             <th class="th-sm">Nom</th>
                             <th class="th-sm">Role</th>
                             {%- if is_granted('ROLE_ORGA') -%}
-                                <th class="th-sm">Valide</th>
-                                <th class="th-sm">fin de validité</th>
                                 <th class="th-sm">Action</th>
                             {%- endif -%}
                         </tr>

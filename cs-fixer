@@ -1,3 +1,2 @@
 #!/bin/bash
-
-vendor/bin/php-cs-fixer fix -v --show-progress=estimating-max --diff-format=udiff
+tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -v src

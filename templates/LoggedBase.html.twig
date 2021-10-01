@@ -1,22 +1,6 @@
-{% extends "/base.html.twig" %}
+{% extends "/MinimalLoggedBase.html.twig" %}
 
-{% block template %}
-    <div class="row">
-        <div class="col-12 border-bottom border-dark z-depth-2" id="nav-bar">
-            <div class="row">
-                <div class="col-2 text-center">
-                    <a href="#"
-                       id="side-nav-control"
-                       data-activates="slide-out"
-                       class="btn button-collapse">
-                        <i class="fas fa-bars"></i>
-                    </a>
-                </div>
-                <div class="col-10">
-                    <a href="{{ path('home') }}" class="text-dark"><h1 class="align-top mt-1 mb-0">Geek-Event</h1></a>
-                </div>
-            </div>
-        </div>
+{% block main %}
         <div class="col-12 full-height">
             <div class="row inner-height">
                 <div class="col-md-2 animated displayed peach-gradient border-right border-dark z-depth-2" id="side-nav">
@@ -28,7 +12,7 @@
                                      data-holder-rendered="true">
                             </div>
                             <div class="col-12 mt-2 text-center">
-                                <a href="{{ path('account_me') }}">
+                                <a href="{{ path('user_me') }}">
                                     <span>
                                         {{ app.user.givenName }} {{ app.user.familyName|upper }}
                                     </span>
@@ -36,7 +20,7 @@
                             </div>
                         </div>
                         <hr class="my-1">
-                        {%- include 'menu.html.twig' with {menu : menu} -%}
+                        {%- include 'menu.html.twig' -%}
                         <!-- Links -->
                     </div>
                 </div>
@@ -46,5 +30,4 @@
                 </div>
             </div>
         </div>
-    </div>
 {% endblock %}

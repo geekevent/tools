@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <title>{% block title %}{{ enigma.name }}{% endblock %}</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="/assets/css/mdb.min.css">
+    <link rel="stylesheet" href="/assets/css/enigma.css">
+    {% block stylesheets %}
+    {% endblock %}
+</head>
+<body class="container-fluid" id="background">
+        <div class="row text-center mt-5 p-2">
+            <div class="col-md-3 d-xs-none"></div>
+            <div class="col-md-6 col-xs-12 p-2 content">
+                <h1>{{ enigma.name }}</h1>
+            </div>
+        </div>
+        <div class="row text-center p-2">
+            <div class="col-md-3 d-xs-none"></div>
+            <div class="col-md-6 col-xs-12 mt-2 p-2 content">
+                <div>{{ enigma.question|raw|nl2br}}</div>
+            </div>
+        </div>
+        {% if enigma.details %}
+            <div class="row text-center p-2">
+                <div class="col-md-3 d-xs-none"></div>
+                <div class="col-md-6 col-xs-12 mt-2 p-2 content">
+                    <div>{{ enigma.details|raw|nl2br }}</div>
+                </div>
+            </div>
+        {% endif %}
+        {% if enigma.answers and 0 != enigma.answers|length %}
+            <div class="row text-center p-2">
+                <div class="col-md-3 d-xs-none"></div>
+                <div class="col-md-6 col-xs-12 mt-1">
+                    <div class="row">
+                        {% for answer in enigma.answers %}
+                            <div class="col-12 content mt-1">{{ answer.position }} : {{ answer.answer }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row text-center p-2">
+            <div class="col-md-3 d-xs-none"></div>
+            <div class="col-md-6 col-xs-12 content">
+                <form action="{{ path('visitor_enigma_validate', {id: enigma.id}) }}" method="post">
+                    <div>
+                        <label for="answer">
+                            {% if enigma.answers and 0 != enigma.answers|length %}
+                                Le numéro de votre réponse :
+                            {% else %}
+                                Votre réponse
+                            {% endif %}
+                            <input id="answer" type="text" name="answer"/>
+                        </label>
+                    </div>
+                    <div>
+                        <label for="email">
+                            Votre Email : <br />
+                            <input id="answer" type="text" name="email"/>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-info"> Valider ma réponse</button>
+                </form>
+            </div>
+        </div>
+<!-- jQuery -->
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="/assets/js/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+<script type="text/javascript" src="/assets/js/addons/datatables.min.js"></script>
+<script type="text/javascript" src="/assets/js/template.js"></script>
+{% block javascripts %}
+{% endblock %}
+</body>
+</html>

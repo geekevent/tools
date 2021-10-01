@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body class="container-fluid">
+    {% for data in qrCodes %}
+        <div style="padding-bottom: 20px">
+            <div>{{ data.enigma.name }}</div>
+            <img src="{{ data.qrCode.dataUri }}" />
+        </div>
+    {% endfor %}
+</body>
+</html>
