@@ -3,18 +3,23 @@
     <a class="p-2 text-left nav-item border-bottom border-grey navbar-button waves-effect text-dark {% if app.request.attributes.get('_route') == 'user_create' %}active{% endif %}" href="{{ path('user_create') }}">
         Utilisateurs
     </a>
+    {% endif %}
+    {% if is_granted('ROLE_ORGA') %}
     <a class="p-2 text-left nav-item border-bottom border-grey navbar-button waves-effect text-dark {% if app.request.attributes.get('_route') == 'events_create' %}active{% endif %}" href="{{ path('events_create') }}">
         Evénements
     </a>
+    {% endif %}
+    {% if is_granted('ROLE_STAFF_ACCUEIL') %}
     <a class="p-2 text-left nav-item border-bottom border-grey navbar-button waves-effect text-dark {% if app.request.attributes.get('_route') == 'spaces_all' %}active{% endif %}" href="{{ path('spaces_all') }}">
         Statistique
     </a>
-    <a class="p-2 text-left nav-item border-bottom border-grey navbar-button waves-effect text-dark {% if app.request.attributes.get('_route') == 'qrcode_create' %}active{% endif %}" href="{{ path('qrcode_create') }}">
-        QrCode
-    </a>
+    {% endif %}
+    {% if is_granted('ROLE_ORGA') %}
     <a class="p-2 text-left nav-item border-bottom border-grey navbar-button waves-effect text-dark {% if app.request.attributes.get('_route') == 'enigma_add' %}active{% endif %}" href="{{ path('enigma_add') }}">
         Enigmes
     </a>
+    {% endif %}
+    {% if is_granted('ROLE_STAFF_ACCUEIL') %}
     <a class="p-2 text-left nav-item border-bottom border-grey navbar-button waves-effect text-dark {% if app.request.attributes.get('_route') == 'enigma_check' %}active{% endif %}" href="{{ path('enigma_check') }}">
         Valider les énigmes
     </a>

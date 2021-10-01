@@ -1,5 +1,6 @@
 {% extends "/LoggedBase.html.twig" %}
 
+{% block title %}Graphique{% endblock %}
 {% block body %}
     {{ parent() }}
     <form method="" class="row">
@@ -7,9 +8,6 @@
             <div class="md-form">
                 <select name="date" class="browser-default custom-select">
                     {% for date in dates %}
-                        {% dump(date|date('Y-m-d') == selectedDate) %}
-                        {% dump(date|date('Y-m-d')) %}
-                        {% dump(selectedDate) %}
                         <option value="{{ date|date('Y-m-d') }}" {% if date|date('Y-m-d') == selectedDate %}selected{% endif %}>{{ date|date('d/m/Y') }}</option>
                     {% endfor %}
                 </select>

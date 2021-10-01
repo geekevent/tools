@@ -26,19 +26,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const ROLE_CHEF_DE_POLE = 'ROLE_CHEF_DE_POLE';
     public const ROLE_STAFF = 'ROLE_STAFF';
     public const ROLE_VISITEUR = 'ROLE_VISITEUR';
+    public const ROLE_STAFF_ACCUEIL = 'ROLE_STAFF_ACCUEIL';
+    public const ROLE_STAFF_ANIMATION = 'ROLE_STAFF_ANIMATION';
+    public const ROLE_STAFF_VIDEO_GAME = 'ROLE_STAFF_VIDEO_GAME';
+    public const ROLE_STAFF_TECHNIQUE = 'ROLE_STAFF_TECHNIQUE';
+    public const ROLE_STAFF_BUVETTE = 'ROLE_STAFF_BUVETTE';
+    public const ROLE_STAFF_INVITE = 'ROLE_STAFF_INVITE';
 
     public const ROLES = [
-        'Administrateur' => self::ROLE_ADMIN,
-        'Organisateur' => self::ROLE_ORGA,
-        'Chef de pole' => self::ROLE_CHEF_DE_POLE,
-        'Staff' => self::ROLE_STAFF,
-        'visiteur' => self::ROLE_VISITEUR,
+        'Administrateur'   => self::ROLE_ADMIN,
+        'Organisateur'     => self::ROLE_ORGA,
+        'Chef de pole'     => self::ROLE_CHEF_DE_POLE,
+        'Staff'            => self::ROLE_STAFF,
+        'Staff accueil'    => self::ROLE_STAFF_ACCUEIL,
+        'Staff animation'  => self::ROLE_STAFF_ANIMATION,
+        'Staff jeux-vidéo' => self::ROLE_STAFF_VIDEO_GAME,
+        'Staff Technique'  => self::ROLE_STAFF_TECHNIQUE,
+        'Staff Buvette'    => self::ROLE_STAFF_BUVETTE,
+        'Staff Invité'     => self::ROLE_STAFF_INVITE,
+        'Visiteur'         => self::ROLE_VISITEUR,
+    ];
+
+    private const ROLES_STRING = [
+        self::ROLE_ADMIN            => 'Administrateur',
+        self::ROLE_ORGA             => 'Organisateur',
+        self::ROLE_CHEF_DE_POLE     => 'Chef de pole',
+        self::ROLE_STAFF            => 'Staff',
+        self::ROLE_STAFF_ACCUEIL    => 'Staff accueil',
+        self::ROLE_STAFF_ANIMATION  => 'Staff animation',
+        self::ROLE_STAFF_VIDEO_GAME => 'Staff jeux-vidéo',
+        self::ROLE_STAFF_TECHNIQUE  => 'Staff Technique',
+        self::ROLE_STAFF_BUVETTE    => 'Staff Buvette',
+        self::ROLE_STAFF_INVITE     => 'Staff Invité',
+        self::ROLE_VISITEUR         => 'Visiteur',
     ];
 
     #[Id]
     #[GeneratedValue]
     #[Column(type: 'integer')]
-    public int $id;
+    public ?int $id;
 
     #[Column(type: 'string', length: 50, unique: true, nullable: false)]
     public string $login;
@@ -96,5 +122,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier()
     {
         return $this->login;
+    }
+
+    public function displayRoles(): string
+    {
+        $roles = [];
+
+        foreach ($this->roles as $role) {
+            $roles[] = self::ROLES_STRING[$role];
+        }
+
+        return implode(', ', $roles);
     }
 }

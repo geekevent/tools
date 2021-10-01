@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\Entry;
+use App\Entity\User;
 use App\Repository\EntryRepository;
 use App\Repository\SpaceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -13,6 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @method User getUser()
+ */
 #[Route(path: '/admin/entry', name: 'entry_')]
 class EntryController extends AbstractController
 {
@@ -32,7 +36,7 @@ class EntryController extends AbstractController
 
         $entry->space = $space;
         $entry->value = ((int) $content['value']);
-        $entry->time = new \DateTime();
+        $entry->time = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $entry->user = $this->getUser();
 
         $entryRepository->persist($entry);

@@ -1,5 +1,5 @@
 {% extends "/LoggedBase.html.twig" %}
-
+{% block title %}Comptes{% endblock %}
 {% block body %}
     {{ parent() }}
 
@@ -57,7 +57,7 @@
                             {%- endif -%}
                             <td class="m-1">{{- item.givenName -}}</td>
                             <td class="m-1">{{- item.familyName -}}</td>
-                            <td class="m-1">{{- item.roles[0] -}}</td>
+                            <td class="m-1">{{- item.displayRoles -}}</td>
                             {%- if is_granted('ROLE_ORGA') -%}
                             <!--Menu-->
                                 <td class="p-2">

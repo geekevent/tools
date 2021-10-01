@@ -106,8 +106,8 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $repository->persist($user);
-            $repository->flush();
             $mail = $created->createMailData($user, sprintf('%s://%s', $request->getScheme(), $request->getHttpHost()));
+            $repository->flush();
             $mailer->send($mail);
 
             return $this->redirectToRoute('user_create');

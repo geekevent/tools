@@ -21,7 +21,6 @@ class EnigmaController extends AbstractController
     public function check(Request $request, EnigmaRepository $repository): Response
     {
         $parameters = array_flip($request->query->all());
-        dump($parameters);
         $code = $parameters['enigma'] ?? null;
 
         if (null === $code) {

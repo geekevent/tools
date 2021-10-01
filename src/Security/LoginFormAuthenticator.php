@@ -19,7 +19,6 @@ class LoginFormAuthenticator extends AbstractAuthenticator
 
     public function supports(Request $request): ?bool
     {
-        dump($request);
         return true;
     }
 

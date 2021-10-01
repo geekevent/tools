@@ -23,47 +23,19 @@ class Entry
     private int $id;
 
     #[Column(type: 'integer', nullable: false)]
-    private int $value;
+    public int $value;
 
     #[Column(type: 'datetime', nullable: false)]
-    private \DateTime $time;
+    public \DateTime $time;
 
     #[ManyToOne(targetEntity: Space::class)]
     #[JoinColumn(name: 'space_id', referencedColumnName: 'id')]
-    private Space $space;
+    public Space $space;
 
     #[ManyToOne(targetEntity: User::class)]
     #[JoinColumn(name: 'user_id', referencedColumnName: 'id')]
-    private User $user;
+    public User $user;
 
     #[Column(type: 'string', length: 4, nullable: false)]
-    private string $moment;
-
-    public function __get(string $name)
-    {
-        if (!property_exists($this, $name)) {
-            throw new \InvalidArgumentException('unkown '.$name.' attribute in '.User::class);
-        }
-
-        return $this->{$name};
-    }
-
-    public function __set(string $name, $value): void
-    {
-        if (!property_exists($this, $name)) {
-            throw new \InvalidArgumentException('unkown '.$name.' attribute in '.User::class);
-        }
-
-        $this->{$name} = $value;
-    }
-
-    public function __isset($name): bool
-    {
-        return property_exists($this, $name);
-    }
-
-    public function __unset(string $name): void
-    {
-        unset($this->{$name});
-    }
+    public string $moment;
 }

@@ -39,7 +39,7 @@ class Create extends AbstractType
                 'choices' => User::ROLES,
                 'label' => false,
                 'required' => true,
-                'multiple' => false,
+                'multiple' => true,
                 'help' => 'Role de l\'utilisateur',
             ])
             ->add('save', SubmitType::class, [
@@ -53,15 +53,15 @@ class Create extends AbstractType
             ])
         ;
 
-        $builder->get('roles')
-            ->addModelTransformer(new CallbackTransformer(
-                function ($rolesArray) {
-                    return count($rolesArray)? $rolesArray[0]: null;
-                },
-                function ($rolesString) {
-                    return [$rolesString];
-                }
-            ));
+//        $builder->get('roles')
+//            ->addModelTransformer(new CallbackTransformer(
+//                function ($rolesArray) {
+//                    return count($rolesArray)? $rolesArray[0]: null;
+//                },
+//                function ($rolesString) {
+//                    return [$rolesString];
+//                }
+//            ));
     }
 
     public function configureOptions(OptionsResolver $resolver): void

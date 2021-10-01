@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @method User getUser()
+ */
 #[Route(path: '/admin/spaces', name: 'spaces_')]
 class StatController extends AbstractController
 {
@@ -25,6 +28,14 @@ class StatController extends AbstractController
     #[IsGranted(self::ROLE)]
     public function spaces(SpaceRepository $repository): Response
     {
+        $count = $repository->countActiveSpace();
+
+        if (0 === $count) {
+            return $this->render('Stat/spaces.html.twig', [
+                'items' => [],
+            ]);
+        }
+
         return $this->render('Stat/spaces.html.twig', [
             'items' => array_map(function (array $data): array {
                 return [
@@ -91,7 +102,6 @@ class StatController extends AbstractController
         $date = $request->query->has('date') ? new \DateTime($request->query->get('date')) : new \DateTime($dates['minDate']);
 
         $moment = $repository->getGaugeByMoment($space, clone $date);
-        dump($date, $request->query->get('date'));
         return $this->render('Stat/graph.html.twig', [
             'moments' => $stats->prepare($moment),
             'dates' => $period,

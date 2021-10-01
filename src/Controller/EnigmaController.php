@@ -106,6 +106,7 @@ class EnigmaController extends AbstractController
         return $this->render('Enigma/Answer/lists.html.twig', [
             'items' => $repository->findAll(),
             'form' => $form->createView(),
+            'enigma' => $enigma,
         ]);
     }
 
@@ -153,7 +154,7 @@ class EnigmaController extends AbstractController
     }
 
     #[Route(path: '/check', name: 'check')]
-    #[IsGranted(User::ROLE_STAFF)]
+    #[IsGranted(User::ROLE_STAFF_ACCUEIL)]
     public function checkResponse(Request $request, VisitorAnswerRepository $repository): Response
     {
         $email = $request->request->get('email');

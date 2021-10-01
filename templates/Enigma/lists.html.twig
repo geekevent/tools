@@ -1,5 +1,6 @@
 {% extends "/LoggedBase.html.twig" %}
 
+{% block title %}Enigmes{% endblock %}
 {% block body %}
     {{ parent() }}
 
@@ -9,7 +10,7 @@
                 <form class="border border-light p-5 rgba-white-strong" action="" method="POST">
                     <div class="row">
                         <div class="col-12 text-center">
-                            <p class="h4 mt-5">Ajouter un événement</p>
+                            <p class="h4 mt-5">Ajouter une enigme</p>
                         </div>
                         <div class="col-6">
                             {{ form_row(form.name) }}

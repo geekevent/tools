@@ -27,49 +27,16 @@ class Space
     #[Id]
     #[GeneratedValue]
     #[Column(type: 'integer')]
-    private int $id;
+    public int $id;
 
     #[Column(type: 'string', length: 50, nullable: false)]
-    private string $name;
+    public string $name;
 
-    #[ManyToOne(targetEntity: Event::class)]
-    private Event $event;
+    #[ManyToOne(targetEntity: Event::class, inversedBy: 'spaces')]
+    public Event $event;
 
     #[Column(type: 'integer', nullable: false)]
-    private int $gaugeMax;
+    public int $gaugeMax;
 
-    private int $gauge;
-
-    public function __get(string $name)
-    {
-        if (!property_exists($this, $name)) {
-            throw new \InvalidArgumentException('unkown '.$name.' attribute in '.User::class);
-        }
-
-        return $this->{$name};
-    }
-
-    public function __set(string $name, $value): void
-    {
-        if (!property_exists($this, $name)) {
-            throw new \InvalidArgumentException('unkown '.$name.' attribute in '.User::class);
-        }
-
-        $this->{$name} = $value;
-    }
-
-    public function __isset($name): bool
-    {
-        return property_exists($this, $name);
-    }
-
-    public function __unset(string $name): void
-    {
-        unset($this->{$name});
-    }
-
-    public function isActive(): bool
-    {
-        return $this->event->endDate >= new \DateTime() && $this->event->startDate <= new \DateTime();
-    }
+    public int $gauge;
 }

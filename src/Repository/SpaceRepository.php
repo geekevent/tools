@@ -41,12 +41,29 @@ class SpaceRepository extends ServiceEntityRepository
         return $qb
             ->addSelect('sum(en.value) as gauge')
             ->innerJoin('sp.event', 'e')
-            ->innerJoin(Entry::class, 'en', Join::WITH, 'en.space = sp.id')
+            ->leftJoin(Entry::class, 'en', Join::WITH, 'en.space = sp.id')
             ->where('e.startDate <= :now')
             ->andWhere('e.endDate >= :now')
             ->setParameter('now', (new \DateTime())->format('Y-m-d'))
             ->getQuery()
             ->execute()
             ;
+    }
+
+    public function countActiveSpace(): int
+    {
+        $qb = $this->createQueryBuilder('sp');
+        $count = $qb
+            ->select('count(sp) as numberSpace')
+            ->innerJoin('sp.event', 'e')
+            ->leftJoin(Entry::class, 'en', Join::WITH, 'en.space = sp.id')
+            ->where('e.startDate <= :now')
+            ->andWhere('e.endDate >= :now')
+            ->setParameter('now', (new \DateTime())->format('Y-m-d'))
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+
+        return $count['numberSpace'];
     }
 }
