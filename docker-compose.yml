@@ -53,7 +53,7 @@ services:
         - "/var/run/docker.sock:/tmp/docker.sock:ro"
         - "./var/proxy/templates/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro"
       volumes_from:
-        - ${PROJECT_NAME}-webserver
+        - webserver
       entrypoint: /usr/local/bin/docker-gen -notify-sighup nginx -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
 
     letsencrypt-nginx-proxy-companion:
@@ -61,7 +61,7 @@ services:
         image: jrcs/letsencrypt-nginx-proxy-companion
         container_name: ${PROJECT_NAME}-letsencrypt-nginx-proxy-companion
         volumes_from:
-          - ${PROJECT_NAME}-webserver
+          - webserver
         volumes:
           - "/var/run/docker.sock:/var/run/docker.sock:ro"
           - "./var/proxy/certs:/etc/nginx/certs:rw"
