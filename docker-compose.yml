@@ -1,7 +1,7 @@
 ###############################################################################
 #                          Generated on docker.io                          #
 ###############################################################################
-version: "3.1"
+version: "2"
 services:
 
     mysql:
@@ -48,7 +48,7 @@ services:
     nginx-gen:
       restart: always
       image: jwilder/docker-gen
-      container_name: ${PROJECT_NAME}-nginx-gen
+      container_name: ${PROJECT_NAME}-nginx-gennginx-gen
       volumes:
         - "/var/run/docker.sock:/tmp/docker.sock:ro"
         - "./var/proxy/templates/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro"
@@ -59,7 +59,7 @@ services:
     letsencrypt-nginx-proxy-companion:
         restart: always
         image: jrcs/letsencrypt-nginx-proxy-companion
-        container_name: letsencrypt-nginx-proxy-companion
+        container_name: ${PROJECT_NAME}-letsencrypt-nginx-proxy-companion
         volumes_from:
           - ${PROJECT_NAME}-webserver
         volumes:
