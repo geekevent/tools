@@ -27,7 +27,7 @@ class Space
     #[Id]
     #[GeneratedValue]
     #[Column(type: 'integer')]
-    public int $id;
+    public ?int $id = null;
 
     #[Column(type: 'string', length: 50, nullable: false)]
     public string $name;

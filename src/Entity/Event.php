@@ -24,7 +24,7 @@ class Event
     #[Id]
     #[GeneratedValue]
     #[Column(type: 'integer')]
-    public int $id;
+    public ?int $id = null;
 
     #[Column(type: 'string', length: 50, unique: true, nullable: false)]
     public string $name;

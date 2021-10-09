@@ -20,7 +20,7 @@ class Entry
     #[Id]
     #[GeneratedValue]
     #[Column(type: 'integer')]
-    private int $id;
+    private ?int $id = null;
 
     #[Column(type: 'integer', nullable: false)]
     public int $value;
