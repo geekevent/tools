@@ -1,0 +1,110 @@
+{% extends "/LoggedBase.html.twig" %}
+
+{% block title %}Enigmes{% endblock %}
+{% block body %}
+    {{ parent() }}
+
+    <div class="row">
+        {%- if is_granted('ROLE_ORGA') -%}
+            <div class="col-12">
+                <form class="border border-light p-5 rgba-white-strong" action="" method="POST">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <p class="h4 mt-5">Ajouter une autorisation COVID</p>
+                        </div>
+                        <div class="col-12">
+                            {{ form_row(form.user) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_row(form.startDate) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_row(form.startTime) }}
+                        </div>
+                        <div class="col-4">
+                            {{ form_row(form.endDate) }}
+                        </div>
+                        <div class="col-4">
+                            {{ form_row(form.endTime) }}
+                        </div>
+                        <div class="col-4">
+                            {{ form_row(form.save) }}
+                            {{ form_row(form._token) }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        {%- endif -%}
+        <div class="col-12 mt-5">
+            <div class="border border-light p-5 rgba-white-strong">
+                Liste des autorisations
+                <table id="role-table" class="table" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="th-sm">Staff</th>
+                            <th class="th-sm">Date début</th>
+                            <th class="th-sm">Heure début</th>
+                            <th class="th-sm">Date fin</th>
+                            <th class="th-sm">Heure fin</th>
+                            <th class="th-sm">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%- for item in items -%}
+                        <tr>
+                            <td>{{ item.user.givenName }} {{ item.user.familyName }}</td>
+                            <td>{{ item.startDate|date('d/m/Y') }}</td>
+                            <td>{{ item.startTime }}</td>
+                            <td>{{ item.endDate|date('d/m/Y') }}</td>
+                            <td>{{ item.endTime }}</td>
+                            <td class="th-sm">
+
+                                <a class="btn btn-primary btn-rounded-light btn-sm m-0" href="{{ path('covid_update', { id : item.id}) }}">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <a class="btn btn-danger btn-rounded-light btn-sm m-0" href="{{ path('covid_delete', { id : item.id}) }}">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {%- endfor -%}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="th-sm">Staff</th>
+                            <th class="th-sm">Date début</th>
+                            <th class="th-sm">Heure début</th>
+                            <th class="th-sm">Date fin</th>
+                            <th class="th-sm">Heure fin</th>
+                            <th class="th-sm">Action</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Central Modal Small -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal"
+         aria-hidden="true">
+        <!-- Change class .modal-sm to change the size of the modal -->
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title w-100" id="myModalLabel">Voulez-vous invalider le compte "<span id="item-name"></span>"</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-primary btn-sm" data-dismiss="modal">Non</a>
+                    <a href="" id="link" class="btn btn-danger btn-sm">Oui</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Central Modal Small -->
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

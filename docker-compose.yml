@@ -27,8 +27,8 @@ services:
           - .:/application
           - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       environment:
-        - VIRTUAL_HOST=${PROJECT_NAME}.geekevent.fr
-        - LETSENCRYPT_HOST=${PROJECT_NAME}.geekevent.fr
+        - VIRTUAL_HOST=${PROJECT_NAME}.${EXTENSION}
+        - LETSENCRYPT_HOST=${PROJECT_NAME}.${EXTENSION}
       network_mode: bridge
       expose:
         - 80

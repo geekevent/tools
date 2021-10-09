@@ -16,7 +16,7 @@ class CovidAuthorization
     #[Id]
     #[GeneratedValue]
     #[Column(type: 'integer')]
-    public int $id;
+    public ?int $id = null;
 
     #[ManyToOne(targetEntity: User::class, inversedBy: 'covidAuthorizations')]
     public User $user;

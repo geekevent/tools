@@ -4,6 +4,8 @@ namespace App\Form\CovidAuthorization;
 
 use App\Entity\CovidAuthorization;
 use App\Entity\Event;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -16,62 +18,65 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class Create extends AbstractType
 {
     private const TOKEN = 'covid_create';
-
     private const CLASSNAME = CovidAuthorization::class;
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('user', ChoiceType::class, [
-                'label' => 'Bénévole',
-                'required' => true,
+            ->add('user', EntityType::class, [
+                'placeholder'  => 'Bénévole',
+                'label'        => false,
+                'required'     => true,
+                'class'        => User::class,
+                'choice_label' => function (User $user) {
+                    return $user->givenName . ' ' . $user->familyName;
+                },
             ])
             ->add(
                 'startDate',
                 TextType::class,
                 [
-                    'label' => 'Date de début',
+                    'label'    => 'Date de début',
                     'required' => true,
-                    'help' => 'Saisir la date au format dd/mm/yyyy',
+                    'help'     => 'Saisir la date au format dd/mm/yyyy',
                 ]
             )
             ->add(
                 'endDate',
                 TextType::class,
                 [
-                    'label' => 'Date de fin',
+                    'label'    => 'Date de fin',
                     'required' => true,
-                    'help' => 'Saisir la date au format dd/mm/yyyy',
+                    'help'     => 'Saisir la date au format dd/mm/yyyy',
                 ]
             )
             ->add(
                 'startTime',
                 TextType::class,
                 [
-                    'label' => 'Heure de début',
+                    'label'    => 'Heure de début',
                     'required' => true,
-                    'help' => 'Saisir l\'heure au format hh:mm',
+                    'help'     => 'Saisir l\'heure au format hh:mm',
                 ]
             )
             ->add(
                 'endTime',
                 TextType::class,
                 [
-                    'label' => 'Heure de fin',
+                    'label'    => 'Heure de fin',
                     'required' => true,
-                    'help' => 'Saisir l\'heure au format hh:mm',
+                    'help'     => 'Saisir l\'heure au format hh:mm',
                 ]
             )
             ->add('save', SubmitType::class, [
-                'label' => 'Valider',
-                'attr' => [
+                'label'    => 'Valider',
+                'attr'     => [
                     'class' => 'btn btn-primary',
                 ],
                 'row_attr' => [
                     'class' => 'text-center md-form',
                 ],
-            ])
-        ;
+            ]);
 
         $builder
             ->get('endDate')
@@ -79,7 +84,7 @@ class Create extends AbstractType
                 new CallbackTransformer(
                     function (?\DateTimeInterface $endDate) {
                         if (null === $endDate) {
-                            return  null;
+                            return null;
                         }
 
                         return $endDate->format('d/m/Y');
@@ -94,8 +99,7 @@ class Create extends AbstractType
                         return new \DateTime(sprintf('%s-%s-%s', $parts[0], $parts[1], $parts[2]));
                     },
                 )
-            )
-        ;
+            );
 
         $builder
             ->get('startDate')
@@ -103,7 +107,7 @@ class Create extends AbstractType
                 new CallbackTransformer(
                     function (?\DateTimeInterface $endDate) {
                         if (null === $endDate) {
-                            return  null;
+                            return null;
                         }
 
                         return $endDate->format('d/m/Y');
@@ -118,17 +122,16 @@ class Create extends AbstractType
                         return new \DateTime(sprintf('%s-%s-%s', $parts[0], $parts[1], $parts[2]));
                     },
                 )
-            )
-        ;
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => self::CLASSNAME,
+            'data_class'      => self::CLASSNAME,
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
-            'csrf_token_id' => self::TOKEN,
+            'csrf_token_id'   => self::TOKEN,
         ]);
     }
 }
