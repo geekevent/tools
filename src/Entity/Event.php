@@ -24,50 +24,22 @@ class Event
     #[Id]
     #[GeneratedValue]
     #[Column(type: 'integer')]
-    private int $id;
+    public int $id;
 
     #[Column(type: 'string', length: 50, unique: true, nullable: false)]
-    private string $name;
+    public string $name;
 
     #[Column(type: 'date', nullable: false)]
-    private \DateTime $startDate;
+    public \DateTime $startDate;
 
     #[Column(type: 'date', nullable: false)]
-    private \DateTime $endDate;
+    public \DateTime $endDate;
 
     #[OneToMany(mappedBy: 'event', targetEntity: Space::class, orphanRemoval: true)]
-    private Collection $spaces;
+    public Collection $spaces;
 
     #[OneToMany(mappedBy: 'event', targetEntity: Enigma::class)]
-    private Collection $enigmas;
-
-    public function __get(string $name)
-    {
-        if (!property_exists($this, $name)) {
-            throw new \InvalidArgumentException('unkown '.$name.' attribute in '.User::class);
-        }
-
-        return $this->{$name};
-    }
-
-    public function __set(string $name, $value): void
-    {
-        if (!property_exists($this, $name)) {
-            throw new \InvalidArgumentException('unkown '.$name.' attribute in '.User::class);
-        }
-
-        $this->{$name} = $value;
-    }
-
-    public function __isset($name): bool
-    {
-        return property_exists($this, $name);
-    }
-
-    public function __unset(string $name): void
-    {
-        unset($this->{$name});
-    }
+    public Collection $enigmas;
 
     public function addSpace(Space $space): void
     {

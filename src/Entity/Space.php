@@ -39,4 +39,9 @@ class Space
     public int $gaugeMax;
 
     public int $gauge;
+
+    public function isActive()
+    {
+        return $this->event->startDate <= new \DateTime() && $this->event->endDate >= new \DateTime();
+    }
 }
