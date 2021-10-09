@@ -6,6 +6,7 @@ use App\Entity\CovidAuthorization;
 use App\Entity\User;
 use App\Form\CovidAuthorization\Create;
 use App\Repository\CovidAuthorizationRepository;
+use Dompdf\Dompdf;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,11 +37,11 @@ class CovidController extends AbstractController
 
         return $this->render('CovidAuthorization/lists.html.twig', [
             'form'  => $form->createView(),
-            'items' => $covidAuthorizationRepository->findAll(),
+            'items' => $covidAuthorizationRepository->findBy([], ['startDate' => 'ASC', 'startTime' => 'ASC', 'endDate' => 'ASC', 'endTime' => 'ASC']),
         ]);
     }
 
-    #[Route(path: '/{id}', name: 'update')]
+    #[Route(path: '/{id}', name: 'update', requirements: ['id' => '\d+'])]
     #[IsGranted(self::ROLE)]
     public function update(Request $request, CovidAuthorization $covidAuthorization, CovidAuthorizationRepository $covidAuthorizationRepository): Response
     {
@@ -55,7 +56,7 @@ class CovidController extends AbstractController
 
         return $this->render('CovidAuthorization/lists.html.twig', [
             'form'  => $form->createView(),
-            'items' => $covidAuthorizationRepository->findAll(),
+            'items' => $covidAuthorizationRepository->findBy([], ['startDate' => 'ASC', 'startTime' => 'ASC', 'endDate' => 'ASC', 'endTime' => 'ASC']),
         ]);
     }
 
@@ -67,5 +68,24 @@ class CovidController extends AbstractController
         $covidAuthorizationRepository->flush();
 
         return $this->redirectToRoute('covid_add');
+    }
+
+
+    #[Route(path: '/pdf', name: 'pdf')]
+    #[IsGranted(self::ROLE)]
+    public function pdf(CovidAuthorizationRepository $covidAuthorizationRepository)
+    {
+
+        $pdf = new Dompdf();
+
+        $pdf->loadHtml($this->renderView('CovidAuthorization/pdf.html.twig', [
+            'items' => $covidAuthorizationRepository->findBy([], ['startDate' => 'ASC', 'startTime' => 'ASC', 'endDate' => 'ASC', 'endTime' => 'ASC']),
+        ]));
+
+        $pdf->render();
+
+        return new Response($pdf->output(), Response::HTTP_CREATED, [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 }

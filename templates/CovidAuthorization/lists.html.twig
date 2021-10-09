@@ -1,6 +1,6 @@
 {% extends "/LoggedBase.html.twig" %}
 
-{% block title %}Enigmes{% endblock %}
+{% block title %}Autorisation COVID{% endblock %}
 {% block body %}
     {{ parent() }}
 
@@ -35,10 +35,13 @@
                 </form>
             </div>
         {%- endif -%}
+        <div class="col-12 mt-3">
+            <a href="{{ path('covid_pdf') }}" download="autorisation.pdf">Télécharger le fichier d'autorisation</a>
+        </div>
         <div class="col-12 mt-5">
             <div class="border border-light p-5 rgba-white-strong">
                 Liste des autorisations
-                <table id="role-table" class="table" width="100%">
+                <table id="role-table" class="table">
                     <thead>
                         <tr>
                             <th class="th-sm">Staff</th>

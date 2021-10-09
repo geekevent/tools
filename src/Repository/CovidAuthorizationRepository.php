@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method CovidAuthorization[] findAll()
+ * @method CovidAuthorization[] findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)()
  */
 class CovidAuthorizationRepository extends ServiceEntityRepository
 {
