@@ -29,7 +29,7 @@ class Entry
     public \DateTime $time;
 
     #[ManyToOne(targetEntity: Space::class)]
-    #[JoinColumn(name: 'space_id', referencedColumnName: 'id')]
+    #[JoinColumn(name: 'space_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     public Space $space;
 
     #[ManyToOne(targetEntity: User::class)]
